@@ -1,124 +1,277 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Загрузить плагин</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0d0d0d;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.card{background:#1a1a1a;border-radius:16px;padding:32px;max-width:500px;width:100%;border:1px solid #2a2a2a;text-align:center}
-.card .icon{font-size:64px;margin-bottom:16px}
-.card h1{font-size:22px;color:#fff;margin-bottom:8px}
-.card p{color:#888;font-size:14px;margin-bottom:20px}
-.file-drop{background:#0a0a0a;border:2px dashed #2a2a2a;border-radius:12px;padding:30px;cursor:pointer;transition:border-color .3s}
-.file-drop:hover{border-color:#1565c0}
-.file-drop input{display:none}
-.file-drop .label{color:#666;font-size:14px}
-.file-drop .label strong{color:#fff}
-.btn{display:inline-block;padding:14px 32px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:opacity .2s;margin-top:16px}
-.btn-primary{background:#4caf50;color:#fff}
-.btn-primary:hover{opacity:.8}
-.btn-primary:disabled{opacity:.4;cursor:not-allowed}
-.back{display:block;margin-top:16px;color:#666;font-size:13px;text-decoration:none}
-.back:hover{color:#aaa}
-.hidden{display:none}
-.selected-file{background:#0a0a0a;border-radius:8px;padding:12px;margin-top:12px;color:#aaa;font-size:13px;border:1px solid #2a2a2a}
-.selected-file strong{color:#fff}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Загрузить плагин — Dolphy Store</title>
+  <style>
+    :root {
+      --bg-color: #0d0d0d;
+      --card-bg: #16181c;
+      --card-border: #262930;
+      --text-main: #f0f3f6;
+      --text-muted: #8b949e;
+      --accent-cyan: #00bcd4;
+      --accent-green: #4caf50;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .header-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Drop Zone */
+    .drop-zone {
+      border: 2px dashed var(--card-border);
+      border-radius: 12px;
+      padding: 30px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .drop-zone.dragover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 188, 212, 0.05);
+    }
+
+    .drop-icon {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .drop-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    /* Информация о выбранном файле */
+    .file-info {
+      display: none;
+      background: #000;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .file-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      word-break: break-all;
+    }
+
+    .file-size {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Кнопки */
+    .action-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #00bcd4, #1565c0);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .btn-submit.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-close {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+    }
+
+    .status-msg {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--accent-green);
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="icon">📤</div>
-  <h1>Загрузка плагина</h1>
-  <p>Выбери .js файл плагина с устройства</p>
+  <div class="container">
+    <h1 class="header-title">📤 Загрузить плагин</h1>
+    <p class="header-desc">Выберите файл формата .js для публикации в магазине Dolphy</p>
 
-  <div class="file-drop" id="fileDrop">
-    <div class="label">
-      📂 <strong>Нажми, чтобы выбрать файл</strong><br>
-      <span style="font-size:12px;color:#666;">Поддерживаются .js файлы</span>
+    <!-- Область перетаскивания / выбора -->
+    <div class="drop-zone" id="drop-zone" onclick="triggerFileInput()">
+      <div class="drop-icon">📄</div>
+      <div class="drop-text" id="drop-text">
+        Перетащите сюда файл .js<br>или <b>нажмите для выбора</b>
+      </div>
+      <input type="file" id="file-input" class="file-input" accept=".js" onchange="handleFileSelect(event)">
     </div>
-    <input type="file" id="fileInput" accept=".js">
+
+    <!-- Детали файла -->
+    <div class="file-info" id="file-info">
+      <div class="file-name" id="file-name">filename.js</div>
+      <div class="file-size" id="file-size">0 KB</div>
+    </div>
+
+    <button class="action-btn btn-submit" id="btn-submit" onclick="uploadFile()">
+      <span>🚀</span> Отправить на проверку
+    </button>
+
+    <button class="action-btn btn-close" onclick="closeWindow()">
+      Закрыть
+    </button>
+
+    <div class="status-msg" id="status-msg">
+      ✅ Плагин отправлен! Он появится в каталоге после проверки.
+    </div>
   </div>
 
-  <div id="fileInfo" class="selected-file hidden">
-    📄 <strong id="fileName">файл.js</strong><br>
-    <span id="fileSize" style="font-size:11px;color:#666;"></span>
-  </div>
+  <script>
+    let selectedFile = null;
 
-  <button class="btn btn-primary" id="uploadBtn" disabled>🚀 Загрузить плагин</button>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
 
-  <div id="successMsg" class="hidden" style="margin-top:16px;padding:16px;background:#1a3a1a;border-radius:8px;border:1px solid #2a4a2a;">
-    <div style="font-size:32px;">✅</div>
-    <p style="color:#4caf50;font-weight:600;margin-top:8px;">Плагин готов к публикации!</p>
-    <p style="color:#888;font-size:13px;">Отправь этот файл разработчику или<br>загрузи в репозиторий вручную</p>
-  </div>
+    // Клик по зоне выбора
+    function triggerFileInput() {
+      fileInput.click();
+    }
 
-  <a href="#" class="back" onclick="window.close(); return false;">✕ Закрыть</a>
-</div>
+    // Drag and Drop события
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      }, false);
+    });
 
-<script>
-const fileInput = document.getElementById('fileInput');
-const fileDrop = document.getElementById('fileDrop');
-const fileInfo = document.getElementById('fileInfo');
-const fileName = document.getElementById('fileName');
-const fileSize = document.getElementById('fileSize');
-const uploadBtn = document.getElementById('uploadBtn');
-const successMsg = document.getElementById('successMsg');
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+      }, false);
+    });
 
-fileInput.addEventListener('change', function(e) {
-  const file = this.files[0];
-  if (file) {
-    fileName.textContent = file.name;
-    fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
-    fileInfo.classList.remove('hidden');
-    uploadBtn.disabled = false;
-  }
-});
+    dropZone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if (files.length > 0) {
+        processFile(files[0]);
+      }
+    });
 
-fileDrop.addEventListener('click', function() {
-  fileInput.click();
-});
+    // Изменение через системный диалог выбора файлов
+    function handleFileSelect(event) {
+      const files = event.target.files;
+      if (files.length > 0) {
+        processFile(files[0]);
+      }
+    }
 
-uploadBtn.addEventListener('click', function() {
-  const file = fileInput.files[0];
-  if (!file) return;
+    // Обработка выбранного файла
+    function processFile(file) {
+      if (!file.name.endsWith('.js')) {
+        alert('Пожалуйста, выберите файл с расширением .js');
+        return;
+      }
 
-  // Читаем содержимое файла
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const content = e.target.result;
+      selectedFile = file;
 
-    // Здесь ты можешь отправить content на сервер
-    // Сейчас просто показываем успех
-    successMsg.classList.remove('hidden');
-    uploadBtn.disabled = true;
-    uploadBtn.textContent = '✅ Загружено!';
-  };
-  reader.readAsText(file);
-});
+      // Отображение сведений
+      document.getElementById('file-name').innerText = file.name;
+      document.getElementById('file-size').innerText = `${(file.size / 1024).toFixed(2)} KB`;
+      document.getElementById('file-info').style.display = 'block';
 
-// Drag & Drop поддержка
-document.addEventListener('dragover', function(e) { e.preventDefault(); });
-document.addEventListener('drop', function(e) { e.preventDefault(); });
-fileDrop.addEventListener('dragover', function(e) {
-  e.preventDefault();
-  this.style.borderColor = '#4caf50';
-});
-fileDrop.addEventListener('dragleave', function(e) {
-  e.preventDefault();
-  this.style.borderColor = '#2a2a2a';
-});
-fileDrop.addEventListener('drop', function(e) {
-  e.preventDefault();
-  this.style.borderColor = '#2a2a2a';
-  const files = e.dataTransfer.files;
-  if (files.length > 0 && files[0].name.endsWith('.js')) {
-    fileInput.files = files;
-    fileInput.dispatchEvent(new Event('change'));
-  }
-});
-</script>
+      // Активация кнопки
+      const btn = document.getElementById('btn-submit');
+      btn.classList.add('active');
+    }
+
+    // Симуляция отправки плагина
+    function uploadFile() {
+      if (!selectedFile) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        console.log('Содержимое загружаемого плагина:', content);
+
+        // Успешный результат
+        document.getElementById('status-msg').style.display = 'block';
+        document.getElementById('btn-submit').classList.remove('active');
+      };
+
+      reader.readAsText(selectedFile);
+    }
+
+    // Закрытие окна
+    function closeWindow() {
+      window.close();
+    }
+  </script>
 </body>
 </html>
