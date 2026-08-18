@@ -1,0 +1,57 @@
+[
+    {
+        "id": "dolphy.vpn",
+        "name": "DolphyVPN",
+        "description": "HTTP/3 VPN tunnel with traffic encryption and DNS bypass",
+        "author": "DCA",
+        "version": "2.5.0",
+        "icon": "🔒",
+        "color": "#00BCD4",
+        "downloads": 1256,
+        "rating": 42
+    },
+    {
+        "id": "dolphy.scanner",
+        "name": "Security Scanner",
+        "description": "Plugin security scanner with detailed report and vulnerability detection",
+        "author": "gyrut",
+        "version": "3.2.0",
+        "icon": "🛡️",
+        "color": "#2196F3",
+        "downloads": 2345,
+        "rating": 49
+    },
+    {
+        "id": "dolphy.news",
+        "name": "Dolphy News",
+        "description": "News aggregator with RSS support and multiple sources",
+        "author": "DCA",
+        "version": "2.3.0",
+        "icon": "📰",
+        "color": "#1565C0",
+        "downloads": 867,
+        "rating": 46
+    },
+    {
+        "id": "dolphy.browser",
+        "name": "Dolphy Browser",
+        "description": "Full-featured browser with tabs, bookmarks and history",
+        "author": "DCA",
+        "version": "2.0.0",
+        "icon": "🌐",
+        "color": "#4CAF50",
+        "downloads": 543,
+        "rating": 45
+    },
+    {
+        "id": "dolphy.code",
+        "name": "Dolphy Code",
+        "description": "Code editor with syntax highlighting and autocomplete",
+        "author": "DCA",
+        "version": "2.1.0",
+        "icon": "💻",
+        "color": "#007ACC",
+        "downloads": 789,
+        "rating": 47
+    }
+]
