@@ -1,399 +1,194 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dolphy Store</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-
-    body {
-      background-color: #0d0d0d;
-      color: #e0e0e0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      padding-bottom: 24px;
-      line-height: 1.4;
-    }
-
-    /* Шапка приложения */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(13, 13, 13, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #1a1a1a;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo {
-      font-size: 28px;
-    }
-
-    .title-group h1 {
-      font-size: 18px;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .version-badge {
-      font-size: 10px;
-      background: rgba(0, 188, 212, 0.15);
-      color: #00bcd4;
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid rgba(0, 188, 212, 0.3);
-    }
-
-    .upload-btn-head {
-      background: linear-gradient(135deg, #1565c0, #00bcd4);
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 188, 212, 0.2);
-    }
-
-    /* Статистика */
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      padding: 16px;
-    }
-
-    .stat-card {
-      background: #141414;
-      border: 1px solid #222;
-      border-radius: 12px;
-      padding: 12px 8px;
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: #00bcd4;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: #888;
-      margin-top: 2px;
-    }
-
-    /* Карточки плагинов */
-    .section-title {
-      padding: 8px 16px;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #666;
-      font-weight: 600;
-    }
-
-    .plugins-list {
-      padding: 0 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .plugin-card {
-      background: #141414;
-      border: 1px solid #222;
-      border-radius: 14px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .plugin-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: var(--accent-color, #00bcd4);
-    }
-
-    .plugin-header {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .plugin-icon {
-      width: 44px;
-      height: 44px;
-      background: #1a1a1a;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      border: 1px solid #2a2a2a;
-      flex-shrink: 0;
-    }
-
-    .plugin-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .plugin-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .plugin-meta {
-      font-size: 12px;
-      color: #777;
-      display: flex;
-      gap: 8px;
-      margin-top: 2px;
-    }
-
-    .plugin-desc {
-      font-size: 13px;
-      color: #aaa;
-      line-height: 1.35;
-    }
-
-    .plugin-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 8px;
-      border-top: 1px solid #1f1f1f;
-    }
-
-    .metrics {
-      display: flex;
-      gap: 12px;
-      font-size: 12px;
-      color: #888;
-    }
-
-    .download-btn {
-      background: #1a1a1a;
-      color: #00bcd4;
-      border: 1px solid rgba(0, 188, 212, 0.4);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .download-btn:active {
-      background: #00bcd4;
-      color: #000;
-    }
-
-    /* Футер */
-    .footer-actions {
-      padding: 24px 16px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .upload-btn-main {
-      width: 100%;
-      background: #1565c0;
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
-    }
-
-    .instructions {
-      background: #111;
-      border: 1px dashed #2a2a2a;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 12px;
-      color: #777;
-      text-align: center;
-    }
-
-    /* Тосты */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: #222;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      border: 1px solid #333;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 1000;
-      pointer-events: none;
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dolphy Store</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d0d0d;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding:16px}
+.header{background:#1a1a1a;padding:16px;border-radius:12px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:18px;color:#fff}
+.badge{background:#4caf50;color:#fff;padding:2px 12px;border-radius:20px;font-size:11px}
+.btn-upload{background:transparent;color:#4caf50;border:1px solid #4caf50;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer}
+.plugin{background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid #2196f3}
+.plugin .top{display:flex;gap:12px;align-items:center}
+.plugin .icon{font-size:24px}
+.plugin .info{flex:1}
+.plugin .name{font-weight:600;color:#fff;font-size:14px}
+.plugin .desc{font-size:12px;color:#aaa;margin-top:2px}
+.plugin .meta{font-size:11px;color:#666;display:flex;gap:12px;margin-top:4px}
+.plugin .actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer}
+.btn-download{background:#1565c0;color:#fff}
+.btn-upload{background:#4caf50;color:#fff}
+.footer{text-align:center;padding:20px 0 10px;color:#444;font-size:12px;border-top:1px solid #2a2a2a;margin-top:16px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:0.3s;pointer-events:none;z-index:100}
+.toast.show{opacity:1}
+.code-box{background:#0a0a0a;border-radius:8px;padding:12px;margin-top:8px;max-height:200px;overflow:auto;border:1px solid #2a2a2a;display:none;font-family:monospace;font-size:11px;color:#aaa;white-space:pre-wrap;word-break:break-all}
+.code-box.show{display:block}
+</style>
 </head>
 <body>
 
-  <!-- Шапка -->
-  <header class="header">
-    <div class="brand">
-      <span class="logo">🐬</span>
-      <div class="title-group">
-        <h1>Dolphy Store <span class="version-badge">v3.0</span></h1>
+<div class="header">
+  <h1>🛒 Dolphy Store</h1>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn-upload" onclick="showUploadGuide()">📤 Загрузить</button>
+    <span class="badge">v3.0</span>
+  </div>
+</div>
+
+<div id="catalog"></div>
+
+<div class="footer">
+  <div style="margin-bottom:8px;">📋 Нажми «Показать код» → скопируй → создай .js файл → импортируй в Dolphy</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PLUGINS = [
+  {id:'dolphyvpn',name:'DolphyVPN',desc:'HTTP/3 VPN tunnel with encryption',author:'DCA',version:'2.5.0',icon:'🔒',color:'#00bcd4',rating:4.8,downloads:1420,
+   code:`// @plugin id=dolphy.vpn name="DolphyVPN" version=2.5.0
+function onLoad(api) {
+  api.other.add({section:"main",title:"DolphyVPN",description:"HTTP/3 VPN tunnel",icon:"🔒",screen:"main",color:0xFF00BCD4,order:0});
+  api.toast('✅ DolphyVPN loaded');
+}
+function screen_main(ui,api,state) {
+  return ui.scaffold({
+    topBar:{title:'🔒 DolphyVPN',showBack:true},
+    content:ui.column({padding:16},[
+      ui.text('DolphyVPN v2.5.0',{style:'titleLarge',bold:true}),
+      ui.spacer({height:8}),
+      ui.text('HTTP/3 VPN tunnel with encryption',{style:'bodyMedium',color:0xFF888888}),
+      ui.spacer({height:16}),
+      ui.text('👤 Author: DCA',{style:'bodySmall',color:0xFF666666})
+    ])
+  });
+}
+function onUnload(api) { api.toast('DolphyVPN unloaded'); }`},
+  {id:'secscan',name:'Security Scanner',desc:'Plugin security scanner with detailed report',author:'gyrut',version:'3.2.0',icon:'🛡️',color:'#2196f3',rating:4.7,downloads:890,
+   code:`// @plugin id=dolphy.scanner name="Security Scanner" version=3.2.0
+function onLoad(api) {
+  api.other.add({section:"main",title:"Security Scanner",description:"Plugin security scanner",icon:"🛡️",screen:"main",color:0xFF2196F3,order:0});
+  api.toast('✅ Security Scanner loaded');
+}
+function screen_main(ui,api,state) {
+  return ui.scaffold({
+    topBar:{title:'🛡️ Security Scanner',showBack:true},
+    content:ui.column({padding:16},[
+      ui.text('Security Scanner v3.2.0',{style:'titleLarge',bold:true}),
+      ui.spacer({height:8}),
+      ui.text('Plugin security scanner with detailed report',{style:'bodyMedium',color:0xFF888888}),
+      ui.spacer({height:16}),
+      ui.text('👤 Author: gyrut',{style:'bodySmall',color:0xFF666666})
+    ])
+  });
+}
+function onUnload(api) { api.toast('Security Scanner unloaded'); }`},
+  {id:'dolphynews',name:'Dolphy News',desc:'News aggregator with RSS support',author:'DCA',version:'2.3.0',icon:'📰',color:'#1565c0',rating:4.6,downloads:650,
+   code:`// @plugin id=dolphy.news name="Dolphy News" version=2.3.0
+function onLoad(api) {
+  api.other.add({section:"main",title:"Dolphy News",description:"News aggregator",icon:"📰",screen:"main",color:0xFF1565C0,order:0});
+  api.toast('✅ Dolphy News loaded');
+}
+function screen_main(ui,api,state) {
+  return ui.scaffold({
+    topBar:{title:'📰 Dolphy News',showBack:true},
+    content:ui.column({padding:16},[
+      ui.text('Dolphy News v2.3.0',{style:'titleLarge',bold:true}),
+      ui.spacer({height:8}),
+      ui.text('News aggregator with RSS support',{style:'bodyMedium',color:0xFF888888}),
+      ui.spacer({height:16}),
+      ui.text('👤 Author: DCA',{style:'bodySmall',color:0xFF666666})
+    ])
+  });
+}
+function onUnload(api) { api.toast('Dolphy News unloaded'); }`},
+  {id:'dolphybrowser',name:'Dolphy Browser',desc:'Browser with tabs and bookmarks',author:'DCA',version:'2.0.0',icon:'🌐',color:'#4caf50',rating:4.5,downloads:530,
+   code:`// @plugin id=dolphy.browser name="Dolphy Browser" version=2.0.0
+function onLoad(api) {
+  api.other.add({section:"main",title:"Dolphy Browser",description:"Browser with tabs",icon:"🌐",screen:"main",color:0xFF4CAF50,order:0});
+  api.toast('✅ Dolphy Browser loaded');
+}
+function screen_main(ui,api,state) {
+  return ui.scaffold({
+    topBar:{title:'🌐 Dolphy Browser',showBack:true},
+    content:ui.column({padding:16},[
+      ui.text('Dolphy Browser v2.0.0',{style:'titleLarge',bold:true}),
+      ui.spacer({height:8}),
+      ui.text('Browser with tabs and bookmarks',{style:'bodyMedium',color:0xFF888888}),
+      ui.spacer({height:16}),
+      ui.text('👤 Author: DCA',{style:'bodySmall',color:0xFF666666})
+    ])
+  });
+}
+function onUnload(api) { api.toast('Dolphy Browser unloaded'); }`},
+  {id:'dolphycode',name:'Dolphy Code',desc:'Code editor with syntax highlighting',author:'DCA',version:'2.1.0',icon:'💻',color:'#007acc',rating:4.4,downloads:720,
+   code:`// @plugin id=dolphy.code name="Dolphy Code" version=2.1.0
+function onLoad(api) {
+  api.other.add({section:"main",title:"Dolphy Code",description:"Code editor",icon:"💻",screen:"main",color:0xFF007ACC,order:0});
+  api.toast('✅ Dolphy Code loaded');
+}
+function screen_main(ui,api,state) {
+  return ui.scaffold({
+    topBar:{title:'💻 Dolphy Code',showBack:true},
+    content:ui.column({padding:16},[
+      ui.text('Dolphy Code v2.1.0',{style:'titleLarge',bold:true}),
+      ui.spacer({height:8}),
+      ui.text('Code editor with syntax highlighting',{style:'bodyMedium',color:0xFF888888}),
+      ui.spacer({height:16}),
+      ui.text('👤 Author: DCA',{style:'bodySmall',color:0xFF666666})
+    ])
+  });
+}
+function onUnload(api) { api.toast('Dolphy Code unloaded'); }`}
+];
+
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function showCode(id) {
+  const p=PLUGINS.find(x=>x.id===id);
+  if(!p)return;
+  const el=document.getElementById('code-'+id);
+  if(el){
+    if(el.classList.contains('show')){el.classList.remove('show');return;}
+    el.textContent=p.code;
+    el.classList.add('show');
+    showToast('📋 Код показан, скопируй и сохрани как .js');
+  }
+}
+
+function showUploadGuide() {
+  showToast('📤 Создай .js файл с кодом плагина → импортируй в Dolphy');
+}
+
+function render() {
+  const c=document.getElementById('catalog');
+  c.innerHTML=PLUGINS.map(p=>`
+    <div class="plugin" style="border-left-color:${p.color}">
+      <div class="top">
+        <div class="icon">${p.icon}</div>
+        <div class="info">
+          <div class="name">${p.name} <span style="font-weight:400;color:#666;font-size:11px">v${p.version}</span></div>
+          <div class="desc">${p.desc} · ${p.author}</div>
+          <div class="meta"><span>⭐ ${p.rating}</span><span>📥 ${p.downloads}</span></div>
+        </div>
       </div>
+      <div class="actions">
+        <button class="btn btn-download" onclick="showCode('${p.id}')">📄 Показать код</button>
+      </div>
+      <div class="code-box" id="code-${p.id}"></div>
     </div>
-    <button class="upload-btn-head" onclick="openUpload()">📤 Загрузить</button>
-  </header>
+  `).join('');
+}
 
-  <!-- Статистика -->
-  <section class="stats-container">
-    <div class="stat-card">
-      <div class="stat-value" id="stat-total">5</div>
-      <div class="stat-label">Доступно</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">0</div>
-      <div class="stat-label">Установлено</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">0</div>
-      <div class="stat-label">Обновлений</div>
-    </div>
-  </section>
-
-  <!-- Список плагинов -->
-  <div class="section-title">Каталог плагинов</div>
-  <main class="plugins-list" id="plugins-container"></main>
-
-  <!-- Футер -->
-  <footer class="footer-actions">
-    <button class="upload-btn-main" onclick="openUpload()">📤 Загрузить свой плагин</button>
-    <div class="instructions">
-      ℹ️ Все скачанные файлы открываются в системном браузере для безопасного сохранения на устройство.
-    </div>
-  </footer>
-
-  <!-- Контейнер для всплывающего уведомления -->
-  <div id="toast" class="toast"></div>
-
-  <script>
-    // Реестр встроенных плагинов
-    const PLUGINS = [
-      { id: 'dolphyvpn', name: 'DolphyVPN', author: 'DCA', version: '2.5.0', desc: 'HTTP/3 VPN tunnel with encryption', icon: '🔒', color: '#00bcd4', rating: 4.8, downloads: 1420 },
-      { id: 'secscan', name: 'Security Scanner', author: 'gyrut', version: '3.2.0', desc: 'Plugin security scanner with detailed report', icon: '🛡️', color: '#2196f3', rating: 4.7, downloads: 890 },
-      { id: 'dolphynews', name: 'Dolphy News', author: 'DCA', version: '2.3.0', desc: 'News aggregator with RSS support', icon: '📰', color: '#1565c0', rating: 4.6, downloads: 650 },
-      { id: 'dolphybrowser', name: 'Dolphy Browser', author: 'DCA', version: '2.0.0', desc: 'Browser with tabs and bookmarks', icon: '🌐', color: '#4caf50', rating: 4.5, downloads: 530 },
-      { id: 'dolphycode', name: 'Dolphy Code', author: 'DCA', version: '2.1.0', desc: 'Code editor with syntax highlighting', icon: '💻', color: '#007acc', rating: 4.4, downloads: 720 }
-    ];
-
-    // Рендеринг элементов каталога
-    function renderPlugins() {
-      const container = document.getElementById('plugins-container');
-      container.innerHTML = '';
-      
-      PLUGINS.forEach(plugin => {
-        const card = document.createElement('article');
-        card.className = 'plugin-card';
-        card.style.setProperty('--accent-color', plugin.color);
-        
-        card.innerHTML = `
-          <div class="plugin-header">
-            <div class="plugin-icon">${plugin.icon}</div>
-            <div class="plugin-info">
-              <div class="plugin-name">${plugin.name}</div>
-              <div class="plugin-meta">
-                <span>v${plugin.version}</span>
-                <span>•</span>
-                <span>${plugin.author}</span>
-              </div>
-            </div>
-          </div>
-          <div class="plugin-desc">${plugin.desc}</div>
-          <div class="plugin-footer">
-            <div class="metrics">
-              <span>⭐ ${plugin.rating}</span>
-              <span>📥 ${plugin.downloads}</span>
-            </div>
-            <button class="download-btn" onclick="openDownload('${plugin.id}')">📥 Скачать .js</button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-      
-      document.getElementById('stat-total').innerText = PLUGINS.length;
-    }
-
-    // Переход на страницу скачивания через смену location (обход WebView)
-    function openDownload(pluginId) {
-      showToast('Переход к скачиванию...');
-      setTimeout(() => {
-        window.location.href = `download.html?id=${encodeURIComponent(pluginId)}`;
-      }, 300);
-    }
-
-    // Переход на страницу загрузки через смену location (обход WebView)
-    function openUpload() {
-      showToast('Открытие формы загрузки...');
-      setTimeout(() => {
-        window.location.href = 'upload.html';
-      }, 300);
-    }
-
-    // Отображение временных всплывающих уведомлений
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.innerText = message;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2500);
-    }
-
-    // Инициализация при загрузке
-    document.addEventListener('DOMContentLoaded', renderPlugins);
-  </script>
+render();
+</script>
 </body>
 </html>
