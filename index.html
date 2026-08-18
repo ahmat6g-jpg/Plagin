@@ -5,44 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Dolphy Store</title>
   <style>
-    :root {
-      --bg-color: #0d0d0d;
-      --card-bg: #16181c;
-      --card-border: #262930;
-      --text-main: #f0f3f6;
-      --text-muted: #8b949e;
-      --accent-cyan: #00bcd4;
-      --accent-blue: #1565c0;
-      --accent-glow: rgba(0, 188, 212, 0.15);
-      --toast-bg: #1f232a;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      padding: 16px;
       user-select: none;
     }
 
-    /* Шапка */
+    body {
+      background-color: #0d0d0d;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    /* Шапка приложения */
     .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 16px;
+      border-bottom: 1px solid #1a1a1a;
     }
 
     .brand {
@@ -51,42 +41,38 @@
       gap: 10px;
     }
 
-    .brand-icon {
+    .logo {
       font-size: 28px;
     }
 
-    .brand-title {
-      font-size: 20px;
+    .title-group h1 {
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .version-tag {
-      font-size: 11px;
-      background: rgba(0, 188, 212, 0.2);
-      color: var(--accent-cyan);
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-
-    .btn-upload-head {
-      background: linear-gradient(135deg, #00bcd4, #1565c0);
       color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.25);
     }
 
-    .btn-upload-head:active {
-      transform: scale(0.96);
+    .version-badge {
+      font-size: 10px;
+      background: rgba(0, 188, 212, 0.15);
+      color: #00bcd4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 188, 212, 0.3);
+    }
+
+    .upload-btn-head {
+      background: linear-gradient(135deg, #1565c0, #00bcd4);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 188, 212, 0.2);
     }
 
     /* Статистика */
@@ -94,12 +80,12 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 20px;
+      padding: 16px;
     }
 
     .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: #141414;
+      border: 1px solid #222;
       border-radius: 12px;
       padding: 12px 8px;
       text-align: center;
@@ -108,183 +94,184 @@
     .stat-value {
       font-size: 20px;
       font-weight: 700;
-      color: var(--accent-cyan);
+      color: #00bcd4;
     }
 
     .stat-label {
       font-size: 11px;
-      color: var(--text-muted);
+      color: #888;
       margin-top: 2px;
     }
 
-    /* Сетка плагинов */
-    .plugin-list {
+    /* Карточки плагинов */
+    .section-title {
+      padding: 8px 16px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .plugins-list {
+      padding: 0 16px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      flex-grow: 1;
     }
 
     .plugin-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: #141414;
+      border: 1px solid #222;
       border-radius: 14px;
       padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       position: relative;
       overflow: hidden;
     }
 
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .plugin-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-color, #00bcd4);
     }
 
-    .plugin-icon-wrap {
+    .plugin-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .plugin-icon {
       width: 44px;
       height: 44px;
+      background: #1a1a1a;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 22px;
-      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #2a2a2a;
       flex-shrink: 0;
     }
 
-    .plugin-meta {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      overflow: hidden;
+    .plugin-info {
+      flex: 1;
+      min-width: 0;
     }
 
     .plugin-name {
       font-size: 16px;
       font-weight: 600;
+      color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .plugin-version {
+    .plugin-meta {
       font-size: 12px;
-      color: var(--text-muted);
+      color: #777;
+      display: flex;
+      gap: 8px;
+      margin-top: 2px;
     }
 
     .plugin-desc {
       font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.4;
+      color: #aaa;
+      line-height: 1.35;
     }
 
-    .card-footer {
+    .plugin-footer {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .author-info {
-      font-size: 12px;
-      color: var(--text-muted);
+      border-top: 1px solid #1f1f1f;
     }
 
     .metrics {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       font-size: 12px;
-      color: var(--text-muted);
+      color: #888;
     }
 
-    .btn-download {
-      background: var(--card-border);
-      color: var(--text-main);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
+    .download-btn {
+      background: #1a1a1a;
+      color: #00bcd4;
+      border: 1px solid rgba(0, 188, 212, 0.4);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      width: 100%;
-      justify-content: center;
-      margin-top: 4px;
-      transition: background 0.2s;
     }
 
-    .btn-download:active {
-      background: var(--accent-blue);
-      border-color: var(--accent-blue);
+    .download-btn:active {
+      background: #00bcd4;
+      color: #000;
     }
 
     /* Футер */
-    .footer {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid var(--card-border);
-      text-align: center;
+    .footer-actions {
+      padding: 24px 16px 12px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .btn-upload-footer {
-      background: transparent;
-      border: 1px dashed var(--accent-cyan);
-      color: var(--accent-cyan);
-      padding: 12px;
+    .upload-btn-main {
+      width: 100%;
+      background: #1565c0;
+      color: #fff;
+      border: none;
+      padding: 14px;
       border-radius: 12px;
+      font-size: 15px;
       font-weight: 600;
-      font-size: 14px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
     }
 
-    .footer-help {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.4;
+    .instructions {
+      background: #111;
+      border: 1px dashed #2a2a2a;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 12px;
+      color: #777;
+      text-align: center;
     }
 
-    /* Тост */
-    #toast-container {
+    /* Тосты */
+    .toast {
       position: fixed;
       bottom: 20px;
       left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      pointer-events: none;
-    }
-
-    .toast {
-      background: var(--toast-bg);
-      color: var(--text-main);
-      border: 1px solid var(--card-border);
+      transform: translateX(-50%) translateY(100px);
+      background: #222;
+      color: #fff;
       padding: 10px 18px;
       border-radius: 20px;
       font-size: 13px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+      border: 1px solid #333;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1000;
+      pointer-events: none;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(10px); }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
     }
   </style>
 </head>
@@ -293,122 +280,119 @@
   <!-- Шапка -->
   <header class="header">
     <div class="brand">
-      <span class="brand-icon">🐬</span>
-      <div>
-        <span class="brand-title">Dolphy Store</span>
-        <span class="version-tag">v3.0</span>
+      <span class="logo">🐬</span>
+      <div class="title-group">
+        <h1>Dolphy Store <span class="version-badge">v3.0</span></h1>
       </div>
     </div>
-    <button class="btn-upload-head" onclick="openBridge('upload.html')">
-      <span>📤</span> Загрузить
-    </button>
+    <button class="upload-btn-head" onclick="openUpload()">📤 Загрузить</button>
   </header>
 
   <!-- Статистика -->
   <section class="stats-container">
     <div class="stat-card">
-      <div class="stat-value" id="stat-available">5</div>
+      <div class="stat-value" id="stat-total">5</div>
       <div class="stat-label">Доступно</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value" style="color: #4caf50;">0</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Установлено</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value" style="color: #ff9800;">0</div>
+      <div class="stat-value">0</div>
       <div class="stat-label">Обновлений</div>
     </div>
   </section>
 
   <!-- Список плагинов -->
-  <main class="plugin-list" id="plugin-container"></main>
+  <div class="section-title">Каталог плагинов</div>
+  <main class="plugins-list" id="plugins-container"></main>
 
   <!-- Футер -->
-  <footer class="footer">
-    <button class="btn-upload-footer" onclick="openBridge('upload.html')">
-      <span>📤</span> Загрузить свой плагин
-    </button>
-    <p class="footer-help">
-      Скачивание и загрузка выполняются во внешнем браузере.<br>
-      Скачанный .js файл импортируйте вручную в настройках Dolphy.
-    </p>
+  <footer class="footer-actions">
+    <button class="upload-btn-main" onclick="openUpload()">📤 Загрузить свой плагин</button>
+    <div class="instructions">
+      ℹ️ Все скачанные файлы открываются в системном браузере для безопасного сохранения на устройство.
+    </div>
   </footer>
 
-  <div id="toast-container"></div>
+  <!-- Контейнер для всплывающего уведомления -->
+  <div id="toast" class="toast"></div>
 
   <script>
-    // Встроенная база данных плагинов
+    // Реестр встроенных плагинов
     const PLUGINS = [
-      { id: 'dolphyvpn', name: 'DolphyVPN', author: 'DCA', version: '2.5.0', desc: 'HTTP/3 VPN tunnel with encryption', icon: '🔒', color: '#00bcd4', rating: '4.9', downloads: 1420 },
-      { id: 'secscan', name: 'Security Scanner', author: 'gyrut', version: '3.2.0', desc: 'Plugin security scanner with detailed report', icon: '🛡️', color: '#2196f3', rating: '4.8', downloads: 890 },
-      { id: 'dolphynews', name: 'Dolphy News', author: 'DCA', version: '2.3.0', desc: 'News aggregator with RSS support', icon: '📰', color: '#1565c0', rating: '4.5', downloads: 530 },
-      { id: 'dolphybrowser', name: 'Dolphy Browser', author: 'DCA', version: '2.0.0', desc: 'Browser with tabs and bookmarks', icon: '🌐', color: '#4caf50', rating: '4.7', downloads: 2100 },
-      { id: 'dolphycode', name: 'Dolphy Code', author: 'DCA', version: '2.1.0', desc: 'Code editor with syntax highlighting', icon: '💻', color: '#007acc', rating: '4.6', downloads: 670 }
+      { id: 'dolphyvpn', name: 'DolphyVPN', author: 'DCA', version: '2.5.0', desc: 'HTTP/3 VPN tunnel with encryption', icon: '🔒', color: '#00bcd4', rating: 4.8, downloads: 1420 },
+      { id: 'secscan', name: 'Security Scanner', author: 'gyrut', version: '3.2.0', desc: 'Plugin security scanner with detailed report', icon: '🛡️', color: '#2196f3', rating: 4.7, downloads: 890 },
+      { id: 'dolphynews', name: 'Dolphy News', author: 'DCA', version: '2.3.0', desc: 'News aggregator with RSS support', icon: '📰', color: '#1565c0', rating: 4.6, downloads: 650 },
+      { id: 'dolphybrowser', name: 'Dolphy Browser', author: 'DCA', version: '2.0.0', desc: 'Browser with tabs and bookmarks', icon: '🌐', color: '#4caf50', rating: 4.5, downloads: 530 },
+      { id: 'dolphycode', name: 'Dolphy Code', author: 'DCA', version: '2.1.0', desc: 'Code editor with syntax highlighting', icon: '💻', color: '#007acc', rating: 4.4, downloads: 720 }
     ];
 
-    // Функция отрисовки карточек плагинов
+    // Рендеринг элементов каталога
     function renderPlugins() {
-      const container = document.getElementById('plugin-container');
+      const container = document.getElementById('plugins-container');
       container.innerHTML = '';
-
+      
       PLUGINS.forEach(plugin => {
-        const card = document.createElement('div');
+        const card = document.createElement('article');
         card.className = 'plugin-card';
+        card.style.setProperty('--accent-color', plugin.color);
+        
         card.innerHTML = `
-          <div class="card-header">
-            <div class="plugin-icon-wrap" style="border: 1px solid ${plugin.color}40; color: ${plugin.color};">
-              ${plugin.icon}
-            </div>
-            <div class="plugin-meta">
+          <div class="plugin-header">
+            <div class="plugin-icon">${plugin.icon}</div>
+            <div class="plugin-info">
               <div class="plugin-name">${plugin.name}</div>
-              <div class="plugin-version">v${plugin.version} • ${plugin.author}</div>
+              <div class="plugin-meta">
+                <span>v${plugin.version}</span>
+                <span>•</span>
+                <span>${plugin.author}</span>
+              </div>
             </div>
           </div>
           <div class="plugin-desc">${plugin.desc}</div>
-          <div class="card-footer">
+          <div class="plugin-footer">
             <div class="metrics">
               <span>⭐ ${plugin.rating}</span>
               <span>📥 ${plugin.downloads}</span>
             </div>
+            <button class="download-btn" onclick="openDownload('${plugin.id}')">📥 Скачать .js</button>
           </div>
-          <button class="btn-download" onclick="downloadPlugin('${plugin.id}')">
-            <span>📥</span> Скачать .js
-          </button>
         `;
         container.appendChild(card);
       });
-
-      document.getElementById('stat-available').innerText = PLUGINS.length;
+      
+      document.getElementById('stat-total').innerText = PLUGINS.length;
     }
 
-    // Мост открытия внешнего браузера через системный механизм WebView Dolphy
-    function openBridge(url) {
-      showToast('Переход в системный браузер...');
+    // Переход на страницу скачивания через смену location (обход WebView)
+    function openDownload(pluginId) {
+      showToast('Переход к скачиванию...');
       setTimeout(() => {
-        window.open(url, '_system');
+        window.location.href = `download.html?id=${encodeURIComponent(pluginId)}`;
       }, 300);
     }
 
-    // Обработчик скачивания
-    function downloadPlugin(pluginId) {
-      const targetUrl = `download.html?id=${pluginId}`;
-      openBridge(targetUrl);
-    }
-
-    // Отображение всплывающего уведомления (Toast)
-    function showToast(message) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerText = message;
-      container.appendChild(toast);
-
+    // Переход на страницу загрузки через смену location (обход WebView)
+    function openUpload() {
+      showToast('Открытие формы загрузки...');
       setTimeout(() => {
-        toast.remove();
-      }, 3000);
+        window.location.href = 'upload.html';
+      }, 300);
     }
 
-    // Инициализация
+    // Отображение временных всплывающих уведомлений
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Инициализация при загрузке
     document.addEventListener('DOMContentLoaded', renderPlugins);
   </script>
 </body>
