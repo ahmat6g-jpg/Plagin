@@ -1,228 +1,140 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plugin Store</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#0d0d0d;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding-bottom:80px}
-        .header{background:linear-gradient(135deg,#1a2a1a,#0a1a0a);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #2a4a2a}
-        .header h1{font-size:20px;color:#fff;font-weight:700}
-        .badge{background:#4caf50;color:#fff;padding:2px 12px;border-radius:20px;font-size:11px;font-weight:600}
-        .tabs{display:flex;background:#1a1a1a;padding:6px 8px;gap:4px;position:sticky;top:62px;z-index:10;border-bottom:1px solid #2a2a2a}
-        .tabs button{flex:1;background:0 0;border:none;color:#999;padding:10px 6px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
-        .tabs button.active{background:#1565c0;color:#fff}
-        .tab{display:none;padding:12px 16px 20px;max-width:600px;margin:0 auto}
-        .tab.active{display:block}
-        .card{background:#1a1a1a;border-radius:14px;padding:18px;margin-bottom:14px;border:1px solid #2a2a2a}
-        .card.green{background:linear-gradient(135deg,#1a3a1a,#0d1f0d);border-color:#2a4a2a}
-        .card h2{font-size:19px;color:#fff;margin-bottom:4px}
-        .card p{color:#888;font-size:14px}
-        .stats{display:flex;gap:12px;margin-top:14px}
-        .stats div{flex:1;background:#0d1a0d;border-radius:10px;padding:10px;text-align:center;border:1px solid #1a3a1a}
-        .stats span{display:block;font-size:22px;font-weight:700;color:#4caf50}
-        .stats small{font-size:11px;color:#888}
-        .row{display:flex;gap:10px;margin-top:14px}
-        .row button{flex:1;padding:12px;border:none;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer;transition:opacity .2s}
-        .row button:active{opacity:.7}
-        .btn-primary{background:#1565c0;color:#fff}
-        .btn-secondary{background:0 0;color:#4caf50;border:1px solid #4caf50}
-        .plugin{background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid #2196f3;transition:all .2s}
-        .plugin:active{opacity:.7}
-        .plugin .top{display:flex;align-items:center;gap:12px}
-        .plugin .icon{font-size:26px;min-width:36px;text-align:center}
-        .plugin .info{flex:1}
-        .plugin .name{font-weight:600;color:#fff;font-size:15px}
-        .plugin .desc{font-size:12px;color:#aaa;line-height:1.3;margin-top:2px}
-        .plugin .meta{font-size:11px;color:#666;display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
-        .plugin .meta .rating{color:#ffa726}
-        .plugin .meta .downloads{color:#4caf50}
-        .plugin .actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-        .plugin .actions button{padding:5px 14px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
-        .plugin .actions button:active{opacity:.7}
-        .btn-install{background:#4caf50;color:#fff}
-        .btn-installed{background:0 0;color:#4caf50;border:1px solid #4caf50;cursor:default}
-        .btn-details{background:0 0;color:#888;border:1px solid #444}
-        .btn-delete{background:0 0;color:#f44336;border:1px solid #662222}
-        .btn-update{background:#ffa726;color:#1a1a1a}
-        .search-box{margin-bottom:14px}
-        .search-box input{width:100%;padding:12px 16px;background:#1a1a1a;border:1px solid #333;border-radius:12px;color:#fff;font-size:14px;outline:0;transition:border-color .2s}
-        .search-box input:focus{border-color:#1565c0}
-        .empty{text-align:center;padding:40px 20px;color:#666}
-        .empty .icon{font-size:44px;display:block;margin-bottom:10px}
-        .empty h4{color:#fff;margin-bottom:4px;font-size:16px}
-        .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
-        .toast.show{opacity:1}
-        @media(max-width:480px){.stats{flex-wrap:wrap}.stats div{min-width:80px}.header h1{font-size:17px}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Plugin Store</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d0d0d;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding:16px}
+.header{background:#1a1a1a;padding:16px;border-radius:12px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:18px;color:#fff}
+.badge{background:#4caf50;color:#fff;padding:2px 12px;border-radius:20px;font-size:11px}
+.plugin{background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid #2196f3}
+.plugin .top{display:flex;gap:12px;align-items:center}
+.plugin .icon{font-size:24px}
+.plugin .info{flex:1}
+.plugin .name{font-weight:600;color:#fff;font-size:14px}
+.plugin .desc{font-size:12px;color:#aaa;margin-top:2px}
+.plugin .meta{font-size:11px;color:#666;display:flex;gap:12px;margin-top:4px}
+.plugin .actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-block}
+.btn:active{opacity:.7}
+.btn-download{background:#1565c0;color:#fff}
+.btn-upload{background:#4caf50;color:#fff}
+.btn-web{background:0 0;color:#888;border:1px solid #444}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:0.3s;pointer-events:none;z-index:100}
+.toast.show{opacity:1}
+.footer{text-align:center;padding:20px 0 10px;color:#444;font-size:11px;border-top:1px solid #2a2a2a;margin-top:16px}
+</style>
 </head>
 <body>
 
 <div class="header">
-    <h1>🛒 Plugin Store</h1>
-    <span class="badge">v3.0</span>
+  <h1>🛒 Dolphy Store</h1>
+  <span class="badge">v3.0</span>
 </div>
 
-<div class="tabs" id="tabs">
-    <button class="active" data-tab="home">Главная</button>
-    <button data-tab="catalog">Каталог</button>
-    <button data-tab="installed">Установленные</button>
+<div id="catalog"></div>
+
+<div class="footer">
+  🔹 Нажми «Скачать» → откроется браузер для сохранения файла<br>
+  🔹 Нажми «Загрузить свой» → откроется браузер для выбора файла
 </div>
 
-<div id="home" class="tab active">
-    <div class="card green">
-        <h2>Добро пожаловать!</h2>
-        <p>Магазин плагинов для Dolphy</p>
-        <div class="stats">
-            <div><span id="total">0</span><small>Доступно</small></div>
-            <div><span id="installed">0</span><small>Установлено</small></div>
-            <div><span id="updates">0</span><small>Обновлений</small></div>
-        </div>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0 10px">
-        <h3 style="font-size:16px;color:#fff">⭐ Популярные</h3>
-        <button style="background:0;border:0;color:#4caf50;font-size:13px;cursor:pointer" onclick="switchTab('catalog')">Смотреть все →</button>
-    </div>
-    <div id="popular"></div>
-    <div class="row">
-        <button class="btn-primary" onclick="switchTab('catalog')">📚 Каталог</button>
-    </div>
-</div>
-
-<div id="catalog" class="tab">
-    <div class="search-box">
-        <input type="text" id="search" placeholder="Поиск плагинов..." oninput="filterPlugins()">
-    </div>
-    <div id="catalog-list"></div>
-</div>
-
-<div id="installed" class="tab">
-    <div id="installed-list"></div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ===== Данные =====
-const STORE={plugins:[],installed:[],currentTab:'home'};
-const DEFAULT_PLUGINS=[
-    {id:'dolphy.vpn',name:'DolphyVPN',desc:'HTTP/3 VPN tunnel with encryption',author:'DCA',ver:'2.5.0',icon:'🔒',color:'#00bcd4',downloads:1256,rating:42},
-    {id:'dolphy.scanner',name:'Security Scanner',desc:'Plugin security scanner with detailed report',author:'gyrut',ver:'3.2.0',icon:'🛡️',color:'#2196f3',downloads:2345,rating:49},
-    {id:'dolphy.news',name:'Dolphy News',desc:'News aggregator with RSS support',author:'DCA',ver:'2.3.0',icon:'📰',color:'#1565c0',downloads:867,rating:46},
-    {id:'dolphy.browser',name:'Dolphy Browser',desc:'Browser with tabs and bookmarks',author:'DCA',ver:'2.0.0',icon:'🌐',color:'#4caf50',downloads:543,rating:45},
-    {id:'dolphy.code',name:'Dolphy Code',desc:'Code editor with syntax highlighting',author:'DCA',ver:'2.1.0',icon:'💻',color:'#007acc',downloads:789,rating:47}
+const PLUGINS = [
+  {
+    id: 'dolphyvpn',
+    name: 'DolphyVPN',
+    desc: 'HTTP/3 VPN tunnel with encryption',
+    author: 'DCA',
+    version: '2.5.0',
+    icon: '🔒',
+    color: '#00bcd4'
+  },
+  {
+    id: 'secscan',
+    name: 'Security Scanner',
+    desc: 'Plugin security scanner with detailed report',
+    author: 'gyrut',
+    version: '3.2.0',
+    icon: '🛡️',
+    color: '#2196f3'
+  },
+  {
+    id: 'dolphynews',
+    name: 'Dolphy News',
+    desc: 'News aggregator with RSS support',
+    author: 'DCA',
+    version: '2.3.0',
+    icon: '📰',
+    color: '#1565c0'
+  },
+  {
+    id: 'dolphybrowser',
+    name: 'Dolphy Browser',
+    desc: 'Browser with tabs and bookmarks',
+    author: 'DCA',
+    version: '2.0.0',
+    icon: '🌐',
+    color: '#4caf50'
+  },
+  {
+    id: 'dolphycode',
+    name: 'Dolphy Code',
+    desc: 'Code editor with syntax highlighting',
+    author: 'DCA',
+    version: '2.1.0',
+    icon: '💻',
+    color: '#007acc'
+  }
 ];
 
-// ===== Загрузка =====
-function loadData(){
-    try{const d=localStorage.getItem('store_installed');if(d)STORE.installed=JSON.parse(d)}catch(e){}
-    STORE.plugins=DEFAULT_PLUGINS;renderAll()
-}
-function renderAll(){renderStats();renderPopular();renderCatalog();renderInstalled()}
-function renderStats(){
-    document.getElementById('total').textContent=STORE.plugins.length;
-    document.getElementById('installed').textContent=STORE.installed.length;
-    const u=STORE.installed.filter(p=>{const a=STORE.plugins.find(x=>x.id===p.id);return a&&a.ver!==p.ver}).length;
-    document.getElementById('updates').textContent=u
-}
-function renderPopular(){
-    const el=document.getElementById('popular');
-    const list=[...STORE.plugins].sort((a,b)=>(b.downloads||0)-(a.downloads||0)).slice(0,3);
-    el.innerHTML=list.map(p=>cardHtml(p,true)).join('')
-}
-function renderCatalog(){
-    document.getElementById('catalog-list').innerHTML=STORE.plugins.map(p=>cardHtml(p,false)).join('')
-}
-function renderInstalled(){
-    const el=document.getElementById('installed-list');
-    if(!STORE.installed.length){el.innerHTML='<div class="empty"><span class="icon">📦</span><h4>Нет установленных плагинов</h4><p style="color:#666;font-size:13px">Перейдите в каталог и установите что-нибудь</p></div>';return}
-    el.innerHTML=STORE.installed.map(p=>installedCard(p)).join('')
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-// ===== Карточки =====
-function cardHtml(p,compact){
-    const inst=STORE.installed.some(x=>x.id===p.id);
-    const c=p.color||'#2196f3';
-    return `<div class="plugin" style="border-left-color:${c}">
-        <div class="top"><span class="icon">${p.icon||'📦'}</span>
-        <div class="info"><div class="name">${p.name}</div>
-        <div class="desc">${compact?p.desc.substring(0,50)+'...':p.desc}</div>
-        <div class="meta"><span>v${p.ver}</span><span>· ${p.author}</span><span class="rating">⭐ ${p.rating||0}</span><span class="downloads">📥 ${p.downloads||0}</span></div></div></div>
-        <div class="actions">${!compact?`<button class="btn-details" onclick="showDetails('${p.id}')">Подробнее</button>`:''}
-        ${inst?`<button class="btn-installed">Установлен</button>`:`<button class="btn-install" onclick="installPlugin('${p.id}')">Установить</button>`}</div>
-    </div>`
-}
-function installedCard(p){
-    const a=STORE.plugins.find(x=>x.id===p.id);
-    const u=a&&a.ver!==p.ver;
-    return `<div class="plugin" style="border-left-color:${u?'#ffa726':'#4caf50'}">
-        <div class="top"><span class="icon">${p.icon||'📦'}</span>
-        <div class="info"><div class="name">${p.name}${u?' 🔄':''}</div>
-        <div class="meta"><span>v${p.ver}</span><span>· ${p.author}</span>${u?`<span style="color:#ffa726">→ v${a.ver}</span>`:''}</div></div></div>
-        <div class="actions">${u?`<button class="btn-update" onclick="updatePlugin('${p.id}')">Обновить</button>`:''}
-        <button class="btn-details" onclick="showDetails('${p.id}')">Подробнее</button>
-        <button class="btn-delete" onclick="deletePlugin('${p.id}')">Удалить</button></div>
-    </div>`
+function downloadPlugin(id) {
+  // Открываем страницу скачивания в браузере
+  const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'download.html?id=' + id;
+  window.open(url, '_system');
+  showToast('🌐 Открывается страница скачивания...');
 }
 
-// ===== Фильтр =====
-function filterPlugins(){
-    const q=document.getElementById('search').value.toLowerCase();
-    document.querySelectorAll('#catalog-list .plugin').forEach(el=>{
-        const n=el.querySelector('.name')?.textContent?.toLowerCase()||'';
-        const d=el.querySelector('.desc')?.textContent?.toLowerCase()||'';
-        el.style.display=n.includes(q)||d.includes(q)?'block':'none'
-    })
+function uploadPlugin() {
+  // Открываем страницу загрузки в браузере
+  const url = window.location.origin + window.location.pathname.replace('index.html', '') + 'upload.html';
+  window.open(url, '_system');
+  showToast('🌐 Открывается страница загрузки...');
 }
 
-// ===== Действия =====
-function installPlugin(id){
-    const p=STORE.plugins.find(x=>x.id===id);
-    if(!p||STORE.installed.some(x=>x.id===id)){showToast('⚠️ Уже установлен');return}
-    if(confirm(`Установить ${p.name} v${p.ver}?`)){
-        STORE.installed.push({id:p.id,name:p.name,ver:p.ver,author:p.author,desc:p.desc,icon:p.icon||'📦',installed:Date.now()});
-        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-        renderAll();showToast('✅ Установлен!')
-    }
-}
-function updatePlugin(id){
-    const i=STORE.installed.find(x=>x.id===id),a=STORE.plugins.find(x=>x.id===id);
-    if(!i||!a)return;
-    if(confirm(`Обновить ${i.name}? v${i.ver} → v${a.ver}`)){
-        i.ver=a.ver;
-        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-        renderAll();showToast('✅ Обновлено!')
-    }
-}
-function deletePlugin(id){
-    if(confirm('Удалить плагин?')){
-        STORE.installed=STORE.installed.filter(x=>x.id!==id);
-        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-        renderAll();showToast('🗑️ Удалено')
-    }
-}
-function showDetails(id){
-    const p=STORE.plugins.find(x=>x.id===id)||STORE.installed.find(x=>x.id===id);
-    if(!p)return;
-    const inst=STORE.installed.some(x=>x.id===p.id);
-    alert(`${p.name} v${p.ver}\n\n📝 ${p.desc}\n👤 ${p.author}\n⭐ Рейтинг: ${p.rating||0}\n📥 Загрузок: ${p.downloads||0}${inst?'\n\n✅ Установлен':'\n\n❌ Не установлен'}`)
+function render() {
+  const container = document.getElementById('catalog');
+  container.innerHTML = PLUGINS.map(p => `
+    <div class="plugin" style="border-left-color: ${p.color}">
+      <div class="top">
+        <div class="icon">${p.icon}</div>
+        <div class="info">
+          <div class="name">${p.name} <span style="font-weight:400;color:#666;font-size:11px">v${p.version}</span></div>
+          <div class="desc">${p.desc} · ${p.author}</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-download" onclick="downloadPlugin('${p.id}')">📥 Скачать</button>
+        <button class="btn btn-upload" onclick="uploadPlugin()">📤 Загрузить свой</button>
+      </div>
+    </div>
+  `).join('');
 }
 
-// ===== Навигация =====
-function switchTab(tab){
-    document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-    document.querySelectorAll('.tabs button').forEach(el=>el.classList.remove('active'));
-    document.getElementById(tab).classList.add('active');
-    document.querySelector(`.tabs button[data-tab="${tab}"]`).classList.add('active')
-}
-function showToast(t){
-    let el=document.querySelector('.toast');
-    if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}
-    el.textContent=t;el.classList.add('show');
-    setTimeout(()=>el.classList.remove('show'),2500)
-}
-document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.tab)}));
-loadData();
+render();
 </script>
-<div class="toast"></div>
 </body>
 </html>
