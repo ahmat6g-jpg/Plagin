@@ -4,54 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plugin Store</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#0a0a0a;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding-bottom:80px}
-        .header{background:linear-gradient(135deg,#1a3a1a,#0a1a0a);padding:16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-        .header h1{font-size:20px;color:#fff}
-        .badge{background:#4caf50;color:#fff;padding:2px 10px;border-radius:20px;font-size:11px}
-        .tabs{display:flex;background:#1a1a1a;padding:4px;gap:4px;position:sticky;top:62px;z-index:10}
-        .tabs button{flex:1;background:0 0;border:none;color:#888;padding:10px 4px;border-radius:8px;font-size:12px;cursor:pointer}
-        .tabs button.active{background:#1565c0;color:#fff}
-        .tab{display:none;padding:12px;max-width:600px;margin:0 auto}
-        .tab.active{display:block}
-        .card{background:#1a1a1a;border-radius:12px;padding:16px;margin-bottom:12px}
-        .card.green{background:linear-gradient(135deg,#1a3a1a,#0d1f0d);border:1px solid #2a4a2a}
-        .card h2{font-size:18px;color:#fff;margin-bottom:4px}
-        .card p{color:#888;font-size:13px}
-        .stats{display:flex;gap:12px;margin-top:12px}
-        .stats div{flex:1;background:#0a1a0a;border-radius:8px;padding:8px;text-align:center}
-        .stats span{display:block;font-size:20px;font-weight:700;color:#4caf50}
-        .stats small{font-size:10px;color:#666}
-        .row{display:flex;gap:8px;margin-top:12px}
-        .row button{flex:1;padding:12px;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer}
-        .btn-primary{background:#1565c0;color:#fff}
-        .btn-secondary{background:0 0;color:#4caf50;border:1px solid #4caf50}
-        .plugin{background:#1a1a1a;border-radius:10px;padding:12px;margin-bottom:8px;border-left:4px solid #2196f3}
-        .plugin .top{display:flex;align-items:center;gap:10px}
-        .plugin .icon{font-size:24px}
-        .plugin .info{flex:1}
-        .plugin .name{font-weight:600;color:#fff;font-size:14px}
-        .plugin .desc{font-size:11px;color:#aaa}
-        .plugin .meta{font-size:10px;color:#666;display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
-        .plugin .actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-        .plugin .actions button{padding:4px 12px;border:none;border-radius:6px;font-size:11px;cursor:pointer}
-        .btn-install{background:#4caf50;color:#fff}
-        .btn-installed{background:0 0;color:#4caf50;border:1px solid #4caf50}
-        .btn-details{background:0 0;color:#888}
-        .btn-delete{background:0 0;color:#f44336}
-        input,textarea{width:100%;padding:10px;background:#0d0d0d;border:1px solid #333;border-radius:8px;color:#fff;font-size:13px;margin-top:4px;font-family:inherit}
-        input:focus,textarea:focus{border-color:#1565c0;outline:0}
-        label{font-size:12px;color:#888}
-        .file-drop{background:#0d0d0d;border:2px dashed #333;border-radius:8px;padding:16px;text-align:center;color:#666;cursor:pointer;margin-top:4px}
-        .file-drop input{display:none}
-        .empty{text-align:center;padding:32px;color:#666}
-        .empty .icon{font-size:40px;display:block;margin-bottom:8px}
-        .empty h4{color:#fff;margin-bottom:4px}
-        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:0.3s;pointer-events:none;z-index:100}
-        .toast.show{opacity:1}
-        @media(max-width:480px){.stats{flex-wrap:wrap}.stats div{min-width:80px}}
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Флаг, что мы внутри Dolphy
+        var isDolphy = typeof Dolphy !== 'undefined';
+        
+        // Мост для вызова Dolphy API из WebView
+        function callDolphyApi(method, data) {
+            if (isDolphy) {
+                try {
+                    // Вызываем через JavaScript-интерфейс Dolphy
+                    return Dolphy.api[method](data);
+                } catch(e) {
+                    console.error('Dolphy API error:', e);
+                    return null;
+                }
+            } else {
+                // В браузере используем эмуляцию
+                return emulateApi(method, data);
+            }
+        }
+        
+        function emulateApi(method, data) {
+            // В браузере просто показываем сообщение
+            alert('В Dolphy здесь будет реальный API вызов: ' + method);
+            return null;
+        }
+        
+        // ===== Загрузка плагина через Dolphy API =====
+        function installPluginViaDolphy(pluginId) {
+            if (!isDolphy) {
+                alert('Это работает только внутри Dolphy!');
+                return;
+            }
+            
+            // Находим плагин в каталоге
+            var plugin = STORE.plugins.find(function(p) { return p.id === pluginId; });
+            if (!plugin) return;
+            
+            // Проверяем, установлен ли уже
+            if (STORE.installed.some(function(p) { return p.id === pluginId; })) {
+                showToast('⚠️ Плагин уже установлен');
+                return;
+            }
+            
+            showToast('📥 Установка ' + plugin.name + '...');
+            
+            // Формируем код плагина
+            var code = generatePluginCode(plugin);
+            
+            // Сохраняем через Dolphy API
+            try {
+                Dolphy.api.files.write('plugins/' + plugin.id + '.js', code);
+                
+                // Добавляем в список установленных
+                STORE.installed.push({
+                    id: plugin.id,
+                    name: plugin.name,
+                    ver: plugin.ver,
+                    author: plugin.author,
+                    desc: plugin.desc,
+                    icon: plugin.icon || '🔌',
+                    installed: Date.now()
+                });
+                
+                // Сохраняем в localStorage (для отображения)
+                localStorage.setItem('store_installed', JSON.stringify(STORE.installed));
+                
+                renderAll();
+                showToast('✅ ' + plugin.name + ' установлен!');
+            } catch(e) {
+                showToast('❌ Ошибка: ' + e.message);
+            }
+        }
+        
+        // ===== Удаление плагина через Dolphy API =====
+        function deletePluginViaDolphy(pluginId) {
+            if (!isDolphy) {
+                alert('Это работает только внутри Dolphy!');
+                return;
+            }
+            
+            if (!confirm('Удалить плагин?')) return;
+            
+            try {
+                Dolphy.api.files.delete('plugins/' + pluginId + '.js');
+                
+                STORE.installed = STORE.installed.filter(function(p) {
+                    return p.id !== pluginId;
+                });
+                
+                localStorage.setItem('store_installed', JSON.stringify(STORE.installed));
+                renderAll();
+                showToast('🗑️ Плагин удалён');
+            } catch(e) {
+                showToast('❌ Ошибка: ' + e.message);
+            }
+        }
+        
+        // ===== Обновление плагина через Dolphy API =====
+        function updatePluginViaDolphy(pluginId) {
+            if (!isDolphy) {
+                alert('Это работает только внутри Dolphy!');
+                return;
+            }
+            
+            var installed = STORE.installed.find(function(p) { return p.id === pluginId; });
+            var available = STORE.plugins.find(function(p) { return p.id === pluginId; });
+            if (!installed || !available) return;
+            
+            if (!confirm('Обновить ' + installed.name + '? v' + installed.ver + ' → v' + available.ver)) return;
+            
+            try {
+                var code = generatePluginCode(available);
+                Dolphy.api.files.write('plugins/' + pluginId + '.js', code);
+                
+                installed.ver = available.ver;
+                localStorage.setItem('store_installed', JSON.stringify(STORE.installed));
+                renderAll();
+                showToast('✅ Обновлено!');
+            } catch(e) {
+                showToast('❌ Ошибка: ' + e.message);
+            }
+        }
+        
+        // ===== Генерация кода плагина =====
+        function generatePluginCode(p) {
+            return '// ' + p.name + ' v' + p.ver + '\n' +
+                '// Автор: ' + p.author + '\n' +
+                '// Установлен из Plugin Store\n' +
+                '// @plugin id=' + p.id + ' name="' + p.name + '" version=' + p.ver + '\n\n' +
+                'function onLoad(api) {\n' +
+                '  api.other.add({\n' +
+                '    section: "plugins",\n' +
+                '    title: "' + p.name + '",\n' +
+                '    description: "' + p.desc + '",\n' +
+                '    icon: "' + (p.icon || '🔌') + '",\n' +
+                '    screen: "main",\n' +
+                '    color: 0x2196F3,\n' +
+                '    order: 1\n' +
+                '  });\n' +
+                '  api.toast("✅ ' + p.name + ' loaded");\n' +
+                '}\n\n' +
+                'function screen_main(ui, api, state) {\n' +
+                '  return ui.scaffold({\n' +
+                '    topBar: { title: "' + p.name + '", showBack: true },\n' +
+                '    content: ui.column({ padding: 16 }, [\n' +
+                '      ui.text("' + p.name + ' v' + p.ver + '", { style: "titleLarge", bold: true }),\n' +
+                '      ui.spacer({ height: 8 }),\n' +
+                '      ui.text("' + p.desc + '", { style: "bodyMedium", color: 0xFF888888 }),\n' +
+                '      ui.spacer({ height: 16 }),\n' +
+                '      ui.text("👤 Автор: ' + p.author + '", { style: "bodySmall", color: 0xFF666666 })\n' +
+                '    ])\n' +
+                '  });\n' +
+                '}\n\n' +
+                'function onUnload(api) {\n' +
+                '  api.toast("' + p.name + ' unloaded");\n' +
+                '}\n';
+        }
+    </script>
 </head>
 <body>
 
@@ -64,7 +175,6 @@
     <button class="active" data-tab="home">🏠 Главная</button>
     <button data-tab="catalog">📚 Каталог</button>
     <button data-tab="installed">📦 Установленные</button>
-    <button data-tab="upload">📤 Загрузить</button>
 </div>
 
 <div id="home" class="tab active">
@@ -84,7 +194,6 @@
     <div id="popular"></div>
     <div class="row">
         <button class="btn-primary" onclick="switchTab('catalog')">📚 Каталог</button>
-        <button class="btn-secondary" onclick="switchTab('upload')">📤 Загрузить</button>
     </div>
 </div>
 
@@ -99,24 +208,8 @@
     <div id="installed-list"></div>
 </div>
 
-<div id="upload" class="tab">
-    <div class="card">
-        <h3 style="font-size:17px;color:#fff">📤 Загрузка плагина</h3>
-        <p style="color:#888;font-size:13px;margin-bottom:12px">Поделитесь с сообществом</p>
-        <label>📝 Название</label><input type="text" id="up-name" placeholder="Название">
-        <label style="display:block;margin-top:10px">📄 Описание</label><textarea id="up-desc" rows="2" placeholder="Краткое описание"></textarea>
-        <label style="display:block;margin-top:10px">👤 Автор</label><input type="text" id="up-author" placeholder="Ваше имя">
-        <label style="display:block;margin-top:10px">📌 Версия</label><input type="text" id="up-version" value="1.0.0">
-        <label style="display:block;margin-top:10px">📂 Файл (.js)</label>
-        <div class="file-drop" onclick="document.getElementById('file-input').click()">
-            <span id="file-name">Выберите файл</span>
-            <input type="file" id="file-input" accept=".js" onchange="selectFile()">
-        </div>
-        <button class="btn-primary" style="width:100%;margin-top:14px;padding:12px" onclick="uploadPlugin()">🚀 Опубликовать</button>
-    </div>
-</div>
-
 <script>
+// ===== Данные =====
 const STORE={plugins:[],installed:[],currentTab:'home'};
 const DEFAULT_PLUGINS=[
     {id:'dolphy.vpn',name:'DolphyVPN',desc:'HTTP/3 VPN tunnel with encryption',author:'DCA',ver:'2.5.0',icon:'🔒',color:'#00bcd4',downloads:1256,rating:42},
@@ -126,6 +219,7 @@ const DEFAULT_PLUGINS=[
     {id:'dolphy.code',name:'Dolphy Code',desc:'Code editor with syntax highlighting',author:'DCA',ver:'2.1.0',icon:'💻',color:'#007acc',downloads:789,rating:47}
 ];
 
+// ===== Загрузка данных =====
 function loadData(){
     try{const d=localStorage.getItem('store_installed');if(d)STORE.installed=JSON.parse(d)}catch(e){}
     STORE.plugins=DEFAULT_PLUGINS;renderAll()
@@ -150,6 +244,8 @@ function renderInstalled(){
     if(!STORE.installed.length){el.innerHTML='<div class="empty"><span class="icon">📦</span><h4>Нет плагинов</h4><p style="color:#666;font-size:13px">Установите что-нибудь из каталога</p></div>';return}
     el.innerHTML=STORE.installed.map(p=>installedCard(p)).join('')
 }
+
+// ===== Карточки =====
 function cardHtml(p,compact){
     const inst=STORE.installed.some(x=>x.id===p.id);
     const c=p.color||'#2196f3';
@@ -174,6 +270,8 @@ function installedCard(p){
         <button class="btn-delete" onclick="deletePlugin('${p.id}')">🗑️</button></div>
     </div>`
 }
+
+// ===== Фильтры =====
 function filterPlugins(){
     const q=document.getElementById('search').value.toLowerCase();
     document.querySelectorAll('#catalog-list .plugin').forEach(el=>{
@@ -182,64 +280,84 @@ function filterPlugins(){
         el.style.display=n.includes(q)||d.includes(q)?'block':'none'
     })
 }
+
+// ===== Установка через Dolphy API =====
 function installPlugin(id){
-    const p=STORE.plugins.find(x=>x.id===id);
-    if(!p||STORE.installed.some(x=>x.id===id)){showToast('⚠️ Уже установлен');return}
-    if(confirm(`Установить ${p.name} v${p.ver}?`)){
-        STORE.installed.push({id:p.id,name:p.name,ver:p.ver,author:p.author,desc:p.desc,icon:p.icon||'🔌',installed:Date.now()});
-        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-        renderAll();showToast('✅ Установлен!')
+    // Используем функцию из заголовка
+    if (typeof installPluginViaDolphy === 'function') {
+        installPluginViaDolphy(id);
+    } else {
+        // Fallback для браузера
+        const p = STORE.plugins.find(x => x.id === id);
+        if (!p) return;
+        if (confirm('Установить ' + p.name + ' v' + p.ver + '?\n(В Dolphy установка будет реальной)')) {
+            STORE.installed.push({
+                id: p.id,
+                name: p.name,
+                ver: p.ver,
+                author: p.author,
+                desc: p.desc,
+                icon: p.icon || '🔌',
+                installed: Date.now()
+            });
+            localStorage.setItem('store_installed', JSON.stringify(STORE.installed));
+            renderAll();
+            showToast('✅ Установлен (эмуляция)');
+        }
     }
 }
+
 function updatePlugin(id){
-    const i=STORE.installed.find(x=>x.id===id),a=STORE.plugins.find(x=>x.id===id);
-    if(!i||!a)return;
-    if(confirm(`Обновить ${i.name}? v${i.ver} → v${a.ver}`)){
-        i.ver=a.ver;
-        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-        renderAll();showToast('✅ Обновлено!')
+    if (typeof updatePluginViaDolphy === 'function') {
+        updatePluginViaDolphy(id);
+    } else {
+        const i=STORE.installed.find(x=>x.id===id),a=STORE.plugins.find(x=>x.id===id);
+        if(!i||!a)return;
+        if(confirm('Обновить ' + i.name + '? v' + i.ver + ' → v' + a.ver)) {
+            i.ver = a.ver;
+            localStorage.setItem('store_installed', JSON.stringify(STORE.installed));
+            renderAll();
+            showToast('✅ Обновлено (эмуляция)');
+        }
     }
 }
+
 function deletePlugin(id){
-    if(confirm('Удалить плагин?')){
-        STORE.installed=STORE.installed.filter(x=>x.id!==id);
-        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-        renderAll();showToast('🗑️ Удалено')
+    if (typeof deletePluginViaDolphy === 'function') {
+        deletePluginViaDolphy(id);
+    } else {
+        if(confirm('Удалить плагин?')){
+            STORE.installed = STORE.installed.filter(x => x.id !== id);
+            localStorage.setItem('store_installed', JSON.stringify(STORE.installed));
+            renderAll();
+            showToast('🗑️ Удалено (эмуляция)');
+        }
     }
 }
+
+// ===== Детали =====
 function showDetails(id){
     const p=STORE.plugins.find(x=>x.id===id)||STORE.installed.find(x=>x.id===id);
     if(!p)return;
     const inst=STORE.installed.some(x=>x.id===p.id);
     alert(`${p.name} v${p.ver}\n\n📝 ${p.desc}\n👤 ${p.author}\n⭐ ${p.rating||'Нет'}\n📥 ${p.downloads||0}${inst?'\n\n✅ Установлен':'\n\n❌ Не установлен'}`)
 }
-function uploadPlugin(){
-    const n=document.getElementById('up-name').value.trim(),d=document.getElementById('up-desc').value.trim(),a=document.getElementById('up-author').value.trim(),v=document.getElementById('up-version').value.trim()||'1.0.0',f=document.getElementById('file-input').files[0];
-    if(!n||!d||!a||!f){showToast('⚠️ Заполните всё и выберите файл');return}
-    const np={id:'user_'+Date.now(),name:n,desc:d,author:a,ver:v,icon:'🔌',rating:0,downloads:0};
-    STORE.plugins.push(np);
-    STORE.installed.push({id:np.id,name:n,ver:v,author:a,desc:d,icon:'🔌',installed:Date.now()});
-    localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-    renderAll();showToast('✅ Загружено!');
-    document.getElementById('up-name').value='';document.getElementById('up-desc').value='';document.getElementById('up-author').value='';document.getElementById('up-version').value='1.0.0';document.getElementById('file-input').value='';document.getElementById('file-name').textContent='Выберите файл';
-    switchTab('installed')
-}
-function selectFile(){
-    const i=document.getElementById('file-input'),l=document.getElementById('file-name');
-    if(i.files&&i.files[0])l.textContent='📄 '+i.files[0].name
-}
+
+// ===== Навигация =====
 function switchTab(tab){
     document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
     document.querySelectorAll('.tabs button').forEach(el=>el.classList.remove('active'));
     document.getElementById(tab).classList.add('active');
     document.querySelector(`.tabs button[data-tab="${tab}"]`).classList.add('active')
 }
+
 function showToast(t){
     let el=document.querySelector('.toast');
     if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}
     el.textContent=t;el.classList.add('show');
     setTimeout(()=>el.classList.remove('show'),2500)
 }
+
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.tab)}));
 loadData();
 </script>
