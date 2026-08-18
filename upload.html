@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Загрузить плагин</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d0d0d;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.card{background:#1a1a1a;border-radius:16px;padding:32px;max-width:500px;width:100%;border:1px solid #2a2a2a;text-align:center}
+.card .icon{font-size:64px;margin-bottom:16px}
+.card h1{font-size:22px;color:#fff;margin-bottom:8px}
+.card p{color:#888;font-size:14px;margin-bottom:20px}
+.file-drop{background:#0a0a0a;border:2px dashed #2a2a2a;border-radius:12px;padding:30px;cursor:pointer;transition:border-color .3s}
+.file-drop:hover{border-color:#1565c0}
+.file-drop input{display:none}
+.file-drop .label{color:#666;font-size:14px}
+.file-drop .label strong{color:#fff}
+.btn{display:inline-block;padding:14px 32px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:opacity .2s;margin-top:16px}
+.btn-primary{background:#4caf50;color:#fff}
+.btn-primary:hover{opacity:.8}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.back{display:block;margin-top:16px;color:#666;font-size:13px;text-decoration:none}
+.back:hover{color:#aaa}
+.hidden{display:none}
+.selected-file{background:#0a0a0a;border-radius:8px;padding:12px;margin-top:12px;color:#aaa;font-size:13px;border:1px solid #2a2a2a}
+.selected-file strong{color:#fff}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="icon">📤</div>
+  <h1>Загрузка плагина</h1>
+  <p>Выбери .js файл плагина с устройства</p>
+
+  <div class="file-drop" id="fileDrop">
+    <div class="label">
+      📂 <strong>Нажми, чтобы выбрать файл</strong><br>
+      <span style="font-size:12px;color:#666;">Поддерживаются .js файлы</span>
+    </div>
+    <input type="file" id="fileInput" accept=".js">
+  </div>
+
+  <div id="fileInfo" class="selected-file hidden">
+    📄 <strong id="fileName">файл.js</strong><br>
+    <span id="fileSize" style="font-size:11px;color:#666;"></span>
+  </div>
+
+  <button class="btn btn-primary" id="uploadBtn" disabled>🚀 Загрузить плагин</button>
+
+  <div id="successMsg" class="hidden" style="margin-top:16px;padding:16px;background:#1a3a1a;border-radius:8px;border:1px solid #2a4a2a;">
+    <div style="font-size:32px;">✅</div>
+    <p style="color:#4caf50;font-weight:600;margin-top:8px;">Плагин готов к публикации!</p>
+    <p style="color:#888;font-size:13px;">Отправь этот файл разработчику или<br>загрузи в репозиторий вручную</p>
+  </div>
+
+  <a href="#" class="back" onclick="window.close(); return false;">✕ Закрыть</a>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const fileDrop = document.getElementById('fileDrop');
+const fileInfo = document.getElementById('fileInfo');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+const uploadBtn = document.getElementById('uploadBtn');
+const successMsg = document.getElementById('successMsg');
+
+fileInput.addEventListener('change', function(e) {
+  const file = this.files[0];
+  if (file) {
+    fileName.textContent = file.name;
+    fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+    fileInfo.classList.remove('hidden');
+    uploadBtn.disabled = false;
+  }
+});
+
+fileDrop.addEventListener('click', function() {
+  fileInput.click();
+});
+
+uploadBtn.addEventListener('click', function() {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  // Читаем содержимое файла
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const content = e.target.result;
+
+    // Здесь ты можешь отправить content на сервер
+    // Сейчас просто показываем успех
+    successMsg.classList.remove('hidden');
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = '✅ Загружено!';
+  };
+  reader.readAsText(file);
+});
+
+// Drag & Drop поддержка
+document.addEventListener('dragover', function(e) { e.preventDefault(); });
+document.addEventListener('drop', function(e) { e.preventDefault(); });
+fileDrop.addEventListener('dragover', function(e) {
+  e.preventDefault();
+  this.style.borderColor = '#4caf50';
+});
+fileDrop.addEventListener('dragleave', function(e) {
+  e.preventDefault();
+  this.style.borderColor = '#2a2a2a';
+});
+fileDrop.addEventListener('drop', function(e) {
+  e.preventDefault();
+  this.style.borderColor = '#2a2a2a';
+  const files = e.dataTransfer.files;
+  if (files.length > 0 && files[0].name.endsWith('.js')) {
+    fileInput.files = files;
+    fileInput.dispatchEvent(new Event('change'));
+  }
+});
+</script>
+</body>
+</html>
