@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Скачать плагин</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d0d0d;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.card{background:#1a1a1a;border-radius:16px;padding:32px;max-width:500px;width:100%;border:1px solid #2a2a2a;text-align:center}
+.card .icon{font-size:64px;margin-bottom:16px}
+.card h1{font-size:22px;color:#fff;margin-bottom:8px}
+.card p{color:#888;font-size:14px;margin-bottom:20px}
+.btn{display:inline-block;padding:14px 32px;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .2s}
+.btn-primary{background:#1565c0;color:#fff}
+.btn-primary:hover{opacity:.8}
+.btn-success{background:#4caf50;color:#fff}
+.btn-success:hover{opacity:.8}
+.back{display:block;margin-top:16px;color:#666;font-size:13px;text-decoration:none}
+.back:hover{color:#aaa}
+.hidden{display:none}
+.code-box{background:#0a0a0a;border-radius:8px;padding:12px;margin:12px 0;text-align:left;font-family:monospace;font-size:12px;color:#aaa;max-height:200px;overflow:auto;border:1px solid #2a2a2a}
+</style>
+</head>
+<body>
+
+<div class="card" id="mainCard">
+  <div class="icon">📥</div>
+  <h1>Скачивание плагина</h1>
+  <p id="info">Загрузка...</p>
+  <button class="btn btn-primary" id="downloadBtn">📥 Скачать файл</button>
+  <a href="#" class="back" onclick="window.close(); return false;">✕ Закрыть</a>
+</div>
+
+<div class="card hidden" id="doneCard">
+  <div class="icon">✅</div>
+  <h1>Готово!</h1>
+  <p>Файл плагина сохранён в папку <strong>Загрузки</strong></p>
+  <p style="font-size:12px;color:#666;">Теперь открой Dolphy → Плагины → Выбрать файл</p>
+  <button class="btn btn-success" onclick="window.close()">✕ Закрыть</button>
+</div>
+
+<script>
+const PLUGINS = {
+  'dolphyvpn': {
+    name: 'DolphyVPN',
+    version: '2.5.0',
+    code: `// @plugin id=dolphy.vpn name="DolphyVPN" version=2.5.0
+function onLoad(api) {
+  api.other.add({
+    section: "main",
+    title: "DolphyVPN",
+    description: "HTTP/3 VPN tunnel",
+    icon: "🔒",
+    screen: "main",
+    color: 0xFF00BCD4,
+    order: 0
+  });
+  api.toast('✅ DolphyVPN loaded');
+}
+function screen_main(ui, api, state) {
+  return ui.scaffold({
+    topBar: { title: '🔒 DolphyVPN', showBack: true },
+    content: ui.column({ padding: 16 }, [
+      ui.text('DolphyVPN v2.5.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('HTTP/3 VPN tunnel with encryption', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: DCA', { style: 'bodySmall', color: 0xFF666666 })
+    ])
+  });
+}
+function onUnload(api) {
+  api.toast('DolphyVPN unloaded');
+}`
+  },
+  'secscan': {
+    name: 'Security Scanner',
+    version: '3.2.0',
+    code: `// @plugin id=dolphy.scanner name="Security Scanner" version=3.2.0
+function onLoad(api) {
+  api.other.add({
+    section: "main",
+    title: "Security Scanner",
+    description: "Plugin security scanner",
+    icon: "🛡️",
+    screen: "main",
+    color: 0xFF2196F3,
+    order: 0
+  });
+  api.toast('✅ Security Scanner loaded');
+}
+function screen_main(ui, api, state) {
+  return ui.scaffold({
+    topBar: { title: '🛡️ Security Scanner', showBack: true },
+    content: ui.column({ padding: 16 }, [
+      ui.text('Security Scanner v3.2.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('Plugin security scanner with detailed report', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: gyrut', { style: 'bodySmall', color: 0xFF666666 })
+    ])
+  });
+}
+function onUnload(api) {
+  api.toast('Security Scanner unloaded');
+}`
+  },
+  'dolphynews': {
+    name: 'Dolphy News',
+    version: '2.3.0',
+    code: `// @plugin id=dolphy.news name="Dolphy News" version=2.3.0
+function onLoad(api) {
+  api.other.add({
+    section: "main",
+    title: "Dolphy News",
+    description: "News aggregator",
+    icon: "📰",
+    screen: "main",
+    color: 0xFF1565C0,
+    order: 0
+  });
+  api.toast('✅ Dolphy News loaded');
+}
+function screen_main(ui, api, state) {
+  return ui.scaffold({
+    topBar: { title: '📰 Dolphy News', showBack: true },
+    content: ui.column({ padding: 16 }, [
+      ui.text('Dolphy News v2.3.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('News aggregator with RSS support', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: DCA', { style: 'bodySmall', color: 0xFF666666 })
+    ])
+  });
+}
+function onUnload(api) {
+  api.toast('Dolphy News unloaded');
+}`
+  },
+  'dolphybrowser': {
+    name: 'Dolphy Browser',
+    version: '2.0.0',
+    code: `// @plugin id=dolphy.browser name="Dolphy Browser" version=2.0.0
+function onLoad(api) {
+  api.other.add({
+    section: "main",
+    title: "Dolphy Browser",
+    description: "Browser with tabs",
+    icon: "🌐",
+    screen: "main",
+    color: 0xFF4CAF50,
+    order: 0
+  });
+  api.toast('✅ Dolphy Browser loaded');
+}
+function screen_main(ui, api, state) {
+  return ui.scaffold({
+    topBar: { title: '🌐 Dolphy Browser', showBack: true },
+    content: ui.column({ padding: 16 }, [
+      ui.text('Dolphy Browser v2.0.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('Browser with tabs and bookmarks', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: DCA', { style: 'bodySmall', color: 0xFF666666 })
+    ])
+  });
+}
+function onUnload(api) {
+  api.toast('Dolphy Browser unloaded');
+}`
+  },
+  'dolphycode': {
+    name: 'Dolphy Code',
+    version: '2.1.0',
+    code: `// @plugin id=dolphy.code name="Dolphy Code" version=2.1.0
+function onLoad(api) {
+  api.other.add({
+    section: "main",
+    title: "Dolphy Code",
+    description: "Code editor",
+    icon: "💻",
+    screen: "main",
+    color: 0xFF007ACC,
+    order: 0
+  });
+  api.toast('✅ Dolphy Code loaded');
+}
+function screen_main(ui, api, state) {
+  return ui.scaffold({
+    topBar: { title: '💻 Dolphy Code', showBack: true },
+    content: ui.column({ padding: 16 }, [
+      ui.text('Dolphy Code v2.1.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('Code editor with syntax highlighting', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: DCA', { style: 'bodySmall', color: 0xFF666666 })
+    ])
+  });
+}
+function onUnload(api) {
+  api.toast('Dolphy Code unloaded');
+}`
+  }
+};
+
+// Получаем id из URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+const plugin = PLUGINS[id];
+
+const mainCard = document.getElementById('mainCard');
+const doneCard = document.getElementById('doneCard');
+const info = document.getElementById('info');
+const downloadBtn = document.getElementById('downloadBtn');
+
+if (plugin) {
+  info.innerHTML = `<strong>${plugin.name}</strong> v${plugin.version}<br>Нажми «Скачать файл», чтобы сохранить плагин в папку Загрузки`;
+
+  downloadBtn.addEventListener('click', function() {
+    // Создаём Blob с кодом плагина
+    const blob = new Blob([plugin.code], { type: 'application/javascript' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = plugin.id + '.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Показываем сообщение об успехе
+    mainCard.classList.add('hidden');
+    doneCard.classList.remove('hidden');
+  });
+} else {
+  info.textContent = '❌ Плагин не найден';
+  downloadBtn.disabled = true;
+  downloadBtn.textContent = 'Ошибка';
+}
+</script>
+</body>
+</html>
