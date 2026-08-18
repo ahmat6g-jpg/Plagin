@@ -2,299 +2,247 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Plugin Store</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <div class="app-header">
-        <div class="header-content">
-            <h1>🛒 Plugin Store</h1>
-            <span class="badge">v3.0</span>
-        </div>
-    </div>
-
-    <div class="tab-bar">
-        <button class="tab-btn active" data-tab="home">🏠 Главная</button>
-        <button class="tab-btn" data-tab="catalog">📚 Каталог</button>
-        <button class="tab-btn" data-tab="installed">📦 Установленные</button>
-        <button class="tab-btn" data-tab="upload">📤 Загрузить</button>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plugin Store</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0A0A;color:#E0E0E0;padding-bottom:80px;min-height:100vh}
-        .app-header{background:linear-gradient(135deg,#1A3A1A,#0A1A0A);padding:20px 16px 16px;position:sticky;top:0;z-index:10}
-        .header-content{display:flex;align-items:center;justify-content:space-between}
-        .header-content h1{font-size:22px;font-weight:700;color:#FFF}
-        .badge{background:#4CAF50;color:#FFF;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
-        .tab-bar{display:flex;background:#1A1A1A;padding:4px 8px;position:sticky;top:68px;z-index:10;gap:4px}
-        .tab-btn{flex:1;background:0 0;border:none;color:#888;font-size:13px;padding:10px 8px;border-radius:8px;cursor:pointer;transition:all .2s}
-        .tab-btn.active{background:#1565C0;color:#FFF}
-        .tab-content{display:none;padding:12px 16px 20px;max-width:600px;margin:0 auto}
-        .tab-content.active{display:block}
-        .welcome-card{background:linear-gradient(135deg,#1A3A1A,#0D1F0D);border-radius:16px;padding:20px;margin-bottom:16px;border:1px solid #2A4A2A}
-        .welcome-card h2{font-size:20px;color:#FFF;margin-bottom:4px}
-        .welcome-card .subtitle{color:#888;font-size:14px;margin-bottom:16px}
-        .stats-row{display:flex;gap:16px}
-        .stat-item{flex:1;text-align:center;background:#0A1A0A;border-radius:10px;padding:10px}
-        .stat-number{display:block;font-size:22px;font-weight:700;color:#4CAF50}
-        .stat-item:nth-child(2) .stat-number{color:#FFA726}
-        .stat-item:nth-child(3) .stat-number{color:#2196F3}
-        .stat-label{font-size:11px;color:#666}
-        .section{margin-bottom:16px}
-        .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-        .section-header h3{font-size:16px;color:#FFF}
-        .see-all{background:0 0;border:none;color:#4CAF50;font-size:13px;cursor:pointer}
-        .quick-actions{display:flex;gap:10px;margin-top:12px}
-        .action-btn{flex:1;padding:14px;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s}
-        .action-btn:active{opacity:.7}
-        .action-btn.primary{background:#1565C0;color:#FFF}
-        .action-btn.secondary{background:0 0;color:#4CAF50;border:1px solid #4CAF50}
-        .plugin-card{background:#1A1A1A;border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid #2196F3;display:flex;flex-direction:column;gap:8px}
-        .plugin-card .plugin-row{display:flex;align-items:center;gap:12px}
-        .plugin-card .plugin-icon{font-size:28px}
-        .plugin-card .plugin-info{flex:1}
-        .plugin-card .plugin-name{font-size:15px;font-weight:600;color:#FFF}
-        .plugin-card .plugin-desc{font-size:12px;color:#AAA;line-height:1.4}
-        .plugin-card .plugin-meta{display:flex;gap:12px;font-size:11px;color:#666;margin-top:2px;flex-wrap:wrap}
-        .plugin-card .plugin-actions{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
-        .plugin-card .plugin-actions button{padding:6px 14px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer}
-        .btn-install{background:#4CAF50;color:#FFF}
-        .btn-installed{background:0 0;color:#4CAF50;border:1px solid #4CAF50}
+        body{background:#0a0a0a;color:#e0e0e0;font-family:system-ui,-apple-system,sans-serif;padding-bottom:80px}
+        .header{background:linear-gradient(135deg,#1a3a1a,#0a1a0a);padding:16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+        .header h1{font-size:20px;color:#fff}
+        .badge{background:#4caf50;color:#fff;padding:2px 10px;border-radius:20px;font-size:11px}
+        .tabs{display:flex;background:#1a1a1a;padding:4px;gap:4px;position:sticky;top:62px;z-index:10}
+        .tabs button{flex:1;background:0 0;border:none;color:#888;padding:10px 4px;border-radius:8px;font-size:12px;cursor:pointer}
+        .tabs button.active{background:#1565c0;color:#fff}
+        .tab{display:none;padding:12px;max-width:600px;margin:0 auto}
+        .tab.active{display:block}
+        .card{background:#1a1a1a;border-radius:12px;padding:16px;margin-bottom:12px}
+        .card.green{background:linear-gradient(135deg,#1a3a1a,#0d1f0d);border:1px solid #2a4a2a}
+        .card h2{font-size:18px;color:#fff;margin-bottom:4px}
+        .card p{color:#888;font-size:13px}
+        .stats{display:flex;gap:12px;margin-top:12px}
+        .stats div{flex:1;background:#0a1a0a;border-radius:8px;padding:8px;text-align:center}
+        .stats span{display:block;font-size:20px;font-weight:700;color:#4caf50}
+        .stats small{font-size:10px;color:#666}
+        .row{display:flex;gap:8px;margin-top:12px}
+        .row button{flex:1;padding:12px;border:none;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer}
+        .btn-primary{background:#1565c0;color:#fff}
+        .btn-secondary{background:0 0;color:#4caf50;border:1px solid #4caf50}
+        .plugin{background:#1a1a1a;border-radius:10px;padding:12px;margin-bottom:8px;border-left:4px solid #2196f3}
+        .plugin .top{display:flex;align-items:center;gap:10px}
+        .plugin .icon{font-size:24px}
+        .plugin .info{flex:1}
+        .plugin .name{font-weight:600;color:#fff;font-size:14px}
+        .plugin .desc{font-size:11px;color:#aaa}
+        .plugin .meta{font-size:10px;color:#666;display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+        .plugin .actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+        .plugin .actions button{padding:4px 12px;border:none;border-radius:6px;font-size:11px;cursor:pointer}
+        .btn-install{background:#4caf50;color:#fff}
+        .btn-installed{background:0 0;color:#4caf50;border:1px solid #4caf50}
         .btn-details{background:0 0;color:#888}
-        .btn-delete{background:0 0;color:#F44336}
-        .search-box{margin-bottom:12px}
-        .search-box input{width:100%;padding:12px 16px;background:#1A1A1A;border:1px solid #333;border-radius:12px;color:#FFF;font-size:14px;outline:0}
-        .search-box input:focus{border-color:#1565C0}
-        .upload-form{background:#1A1A1A;border-radius:16px;padding:20px}
-        .upload-form h3{font-size:18px;color:#FFF;margin-bottom:4px}
-        .upload-form .subtitle{color:#888;font-size:13px;margin-bottom:16px}
-        .form-group{margin-bottom:14px}
-        .form-group label{display:block;font-size:13px;color:#888;margin-bottom:4px}
-        .form-group input,.form-group textarea{width:100%;padding:10px 12px;background:#0D0D0D;border:1px solid #333;border-radius:8px;color:#FFF;font-size:14px;outline:0;transition:border-color .2s;font-family:inherit}
-        .form-group input:focus,.form-group textarea:focus{border-color:#1565C0}
-        .form-group textarea{resize:vertical;min-height:60px}
-        .file-drop{background:#0D0D0D;border:2px dashed #333;border-radius:8px;padding:16px;text-align:center;color:#666;cursor:pointer;transition:border-color .2s}
-        .file-drop:hover{border-color:#1565C0}
+        .btn-delete{background:0 0;color:#f44336}
+        input,textarea{width:100%;padding:10px;background:#0d0d0d;border:1px solid #333;border-radius:8px;color:#fff;font-size:13px;margin-top:4px;font-family:inherit}
+        input:focus,textarea:focus{border-color:#1565c0;outline:0}
+        label{font-size:12px;color:#888}
+        .file-drop{background:#0d0d0d;border:2px dashed #333;border-radius:8px;padding:16px;text-align:center;color:#666;cursor:pointer;margin-top:4px}
         .file-drop input{display:none}
-        .empty-state{text-align:center;padding:40px 20px;color:#666}
-        .empty-state .icon{font-size:48px;margin-bottom:12px}
-        .empty-state h4{color:#FFF;margin-bottom:6px}
-        .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#333;color:#FFF;padding:12px 24px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
+        .empty{text-align:center;padding:32px;color:#666}
+        .empty .icon{font-size:40px;display:block;margin-bottom:8px}
+        .empty h4{color:#fff;margin-bottom:4px}
+        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:0.3s;pointer-events:none;z-index:100}
         .toast.show{opacity:1}
-        @media(max-width:480px){.stats-row{gap:8px}.stat-item{padding:8px}.stat-number{font-size:18px}}
+        @media(max-width:480px){.stats{flex-wrap:wrap}.stats div{min-width:80px}}
     </style>
 </head>
 <body>
 
-    <div class="app-header">
-        <div class="header-content">
-            <h1>🛒 Plugin Store</h1>
-            <span class="badge">v3.0</span>
+<div class="header">
+    <h1>🛒 Plugin Store</h1>
+    <span class="badge">v3.0</span>
+</div>
+
+<div class="tabs" id="tabs">
+    <button class="active" data-tab="home">🏠 Главная</button>
+    <button data-tab="catalog">📚 Каталог</button>
+    <button data-tab="installed">📦 Установленные</button>
+    <button data-tab="upload">📤 Загрузить</button>
+</div>
+
+<div id="home" class="tab active">
+    <div class="card green">
+        <h2>🔥 Добро пожаловать!</h2>
+        <p>Магазин плагинов для Dolphy</p>
+        <div class="stats">
+            <div><span id="total">0</span><small>Доступно</small></div>
+            <div><span id="installed">0</span><small>Установлено</small></div>
+            <div><span id="updates">0</span><small>Обновлений</small></div>
         </div>
     </div>
-
-    <div class="tab-bar">
-        <button class="tab-btn active" data-tab="home">🏠 Главная</button>
-        <button class="tab-btn" data-tab="catalog">📚 Каталог</button>
-        <button class="tab-btn" data-tab="installed">📦 Установленные</button>
-        <button class="tab-btn" data-tab="upload">📤 Загрузить</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px">
+        <h3 style="font-size:15px;color:#fff">⭐ Популярные</h3>
+        <button style="background:0;border:0;color:#4caf50;font-size:12px;cursor:pointer" onclick="switchTab('catalog')">Смотреть все →</button>
     </div>
-
-    <div id="tab-home" class="tab-content active">
-        <div class="welcome-card">
-            <h2>🔥 Добро пожаловать в Plugin Store!</h2>
-            <p class="subtitle">Магазин плагинов для Dolphy</p>
-            <div class="stats-row">
-                <div class="stat-item"><span class="stat-number" id="total-plugins">0</span><span class="stat-label">Доступно</span></div>
-                <div class="stat-item"><span class="stat-number" id="installed-count">0</span><span class="stat-label">Установлено</span></div>
-                <div class="stat-item"><span class="stat-number" id="update-count">0</span><span class="stat-label">Обновлений</span></div>
-            </div>
-        </div>
-        <div class="section">
-            <div class="section-header"><h3>⭐ Популярные</h3><button class="see-all" onclick="switchTab('catalog')">Смотреть все →</button></div>
-            <div id="popular-list"></div>
-        </div>
-        <div class="quick-actions">
-            <button class="action-btn primary" onclick="switchTab('catalog')">📚 Открыть каталог</button>
-            <button class="action-btn secondary" onclick="switchTab('upload')">📤 Загрузить свой</button>
-        </div>
+    <div id="popular"></div>
+    <div class="row">
+        <button class="btn-primary" onclick="switchTab('catalog')">📚 Каталог</button>
+        <button class="btn-secondary" onclick="switchTab('upload')">📤 Загрузить</button>
     </div>
+</div>
 
-    <div id="tab-catalog" class="tab-content">
-        <div class="search-box"><input type="text" id="search-input" placeholder="🔍 Поиск плагинов..." oninput="filterPlugins()"></div>
-        <div id="catalog-list"></div>
+<div id="catalog" class="tab">
+    <div style="margin-bottom:12px">
+        <input type="text" id="search" placeholder="🔍 Поиск..." oninput="filterPlugins()">
     </div>
+    <div id="catalog-list"></div>
+</div>
 
-    <div id="tab-installed" class="tab-content"><div id="installed-list"></div></div>
+<div id="installed" class="tab">
+    <div id="installed-list"></div>
+</div>
 
-    <div id="tab-upload" class="tab-content">
-        <div class="upload-form">
-            <h3>📤 Загрузка плагина</h3>
-            <p class="subtitle">Поделитесь своим плагином с сообществом</p>
-            <div class="form-group"><label>📝 Название плагина</label><input type="text" id="upload-name" placeholder="Название"></div>
-            <div class="form-group"><label>📄 Описание</label><textarea id="upload-desc" placeholder="Краткое описание" rows="3"></textarea></div>
-            <div class="form-group"><label>👤 Автор</label><input type="text" id="upload-author" placeholder="Ваше имя"></div>
-            <div class="form-group"><label>📌 Версия</label><input type="text" id="upload-version" placeholder="1.0.0" value="1.0.0"></div>
-            <div class="form-group">
-                <label>📂 Файл плагина (.js)</label>
-                <div class="file-drop" onclick="document.getElementById('file-input').click()">
-                    <span id="file-name">Выберите файл</span>
-                    <input type="file" id="file-input" accept=".js" onchange="selectFile()">
-                </div>
-            </div>
-            <button class="action-btn primary" onclick="uploadPlugin()" style="width:100%;margin-top:16px;">🚀 Опубликовать плагин</button>
+<div id="upload" class="tab">
+    <div class="card">
+        <h3 style="font-size:17px;color:#fff">📤 Загрузка плагина</h3>
+        <p style="color:#888;font-size:13px;margin-bottom:12px">Поделитесь с сообществом</p>
+        <label>📝 Название</label><input type="text" id="up-name" placeholder="Название">
+        <label style="display:block;margin-top:10px">📄 Описание</label><textarea id="up-desc" rows="2" placeholder="Краткое описание"></textarea>
+        <label style="display:block;margin-top:10px">👤 Автор</label><input type="text" id="up-author" placeholder="Ваше имя">
+        <label style="display:block;margin-top:10px">📌 Версия</label><input type="text" id="up-version" value="1.0.0">
+        <label style="display:block;margin-top:10px">📂 Файл (.js)</label>
+        <div class="file-drop" onclick="document.getElementById('file-input').click()">
+            <span id="file-name">Выберите файл</span>
+            <input type="file" id="file-input" accept=".js" onchange="selectFile()">
         </div>
+        <button class="btn-primary" style="width:100%;margin-top:14px;padding:12px" onclick="uploadPlugin()">🚀 Опубликовать</button>
     </div>
+</div>
 
-    <script>
-        const STORE={plugins:[],installed:[],currentTab:'home'};
-        function defaultPlugins(){return[
-            {id:'dolphy.vpn',name:'DolphyVPN',description:'HTTP/3 VPN tunnel with traffic encryption',author:'DCA',version:'2.5.0',icon:'🔒',color:'#00BCD4',downloads:1256,rating:42},
-            {id:'dolphy.scanner',name:'Security Scanner',description:'Plugin security scanner with detailed report',author:'gyrut',version:'3.2.0',icon:'🛡️',color:'#2196F3',downloads:2345,rating:49},
-            {id:'dolphy.news',name:'Dolphy News',description:'News aggregator with RSS support',author:'DCA',version:'2.3.0',icon:'📰',color:'#1565C0',downloads:867,rating:46},
-            {id:'dolphy.browser',name:'Dolphy Browser',description:'Full-featured browser with tabs and bookmarks',author:'DCA',version:'2.0.0',icon:'🌐',color:'#4CAF50',downloads:543,rating:45},
-            {id:'dolphy.code',name:'Dolphy Code',description:'Code editor with syntax highlighting',author:'DCA',version:'2.1.0',icon:'💻',color:'#007ACC',downloads:789,rating:47}
-        ]}
-        function loadData(){
-            try{const installed=localStorage.getItem('store_installed');if(installed)STORE.installed=JSON.parse(installed)}catch(e){}
-            STORE.plugins=defaultPlugins();renderAll()
-        }
-        function renderAll(){renderStats();renderPopular();renderCatalog();renderInstalled()}
-        function renderStats(){
-            document.getElementById('total-plugins').textContent=STORE.plugins.length;
-            document.getElementById('installed-count').textContent=STORE.installed.length;
-            const updates=STORE.installed.filter(p=>{const a=STORE.plugins.find(x=>x.id===p.id);return a&&a.version!==p.version}).length;
-            document.getElementById('update-count').textContent=updates
-        }
-        function renderPopular(){
-            const container=document.getElementById('popular-list');
-            const popular=[...STORE.plugins].sort((a,b)=>(b.downloads||0)-(a.downloads||0)).slice(0,3);
-            container.innerHTML=popular.map(p=>createCard(p,true)).join('')
-        }
-        function renderCatalog(){
-            document.getElementById('catalog-list').innerHTML=STORE.plugins.map(p=>createCard(p,false)).join('')
-        }
-        function renderInstalled(){
-            const container=document.getElementById('installed-list');
-            if(STORE.installed.length===0){
-                container.innerHTML='<div class="empty-state"><div class="icon">📦</div><h4>Нет установленных плагинов</h4><p style="color:#666;font-size:13px;">Перейдите в каталог и установите что-нибудь!</p></div>';
-                return
-            }
-            container.innerHTML=STORE.installed.map(p=>createInstalledCard(p)).join('')
-        }
-        function createCard(p,c){
-            const inst=STORE.installed.some(x=>x.id===p.id);
-            const color=p.color||'#2196F3';
-            return '<div class="plugin-card" style="border-left-color:'+color+'"><div class="plugin-row"><div class="plugin-icon">'+(p.icon||'🔌')+
-                '</div><div class="plugin-info"><div class="plugin-name">'+p.name+'</div><div class="plugin-desc">'+
-                (c?p.description.substring(0,60)+'...':p.description)+'</div><div class="plugin-meta"><span>v'+p.version+
-                '</span><span>· '+p.author+'</span><span>· ⭐ '+(p.rating||0)+'</span><span>· 📥 '+(p.downloads||0)+
-                '</span></div></div></div><div class="plugin-actions">'+
-                (!c?'<button class="btn-details" onclick="showDetails(\''+p.id+'\')">📖 Подробнее</button>':'')+
-                (inst?'<button class="btn-installed" disabled>✅ Установлен</button>':'<button class="btn-install" onclick="installPlugin(\''+p.id+'\')">📥 Установить</button>')+
-                '</div></div>'
-        }
-        function createInstalledCard(p){
-            const a=STORE.plugins.find(x=>x.id===p.id);
-            const u=a&&a.version!==p.version;
-            return '<div class="plugin-card" style="border-left-color:'+(u?'#FFA726':'#4CAF50')+
-                '"><div class="plugin-row"><div class="plugin-icon">'+(p.icon||'🔌')+'</div><div class="plugin-info"><div class="plugin-name">'+
-                p.name+(u?' 🔄':'')+'</div><div class="plugin-meta"><span>v'+p.version+'</span><span>· '+p.author+
-                '</span>'+(u?'<span style="color:#FFA726;">→ v'+a.version+' доступно</span>':'')+
-                '</div></div></div><div class="plugin-actions">'+(u?'<button class="btn-install" onclick="updatePlugin(\''+p.id+'\')">🔄 Обновить</button>':'')+
-                '<button class="btn-details" onclick="showDetails(\''+p.id+'\')">📖 Подробнее</button>'+
-                '<button class="btn-delete" onclick="deletePlugin(\''+p.id+'\')">🗑️</button></div></div>'
-        }
-        function filterPlugins(){
-            const q=document.getElementById('search-input').value.toLowerCase();
-            document.querySelectorAll('#catalog-list .plugin-card').forEach(c=>{
-                const n=c.querySelector('.plugin-name')?.textContent?.toLowerCase()||'';
-                const d=c.querySelector('.plugin-desc')?.textContent?.toLowerCase()||'';
-                c.style.display=n.includes(q)||d.includes(q)?'block':'none'
-            })
-        }
-        function installPlugin(id){
-            const p=STORE.plugins.find(x=>x.id===id);
-            if(!p)return;
-            if(STORE.installed.some(x=>x.id===id)){showToast('⚠️ Плагин уже установлен');return}
-            if(confirm('Установить '+p.name+' v'+p.version+'?\nАвтор: '+p.author)){
-                STORE.installed.push({id:p.id,name:p.name,version:p.version,author:p.author,description:p.description,icon:p.icon||'🔌',installed:Date.now()});
-                localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-                renderAll();showToast('✅ '+p.name+' установлен!')
-            }
-        }
-        function updatePlugin(id){
-            const inst=STORE.installed.find(x=>x.id===id);
-            const avail=STORE.plugins.find(x=>x.id===id);
-            if(!inst||!avail)return;
-            if(confirm('Обновить '+inst.name+'?\nТекущая: v'+inst.version+'\nНовая: v'+avail.version)){
-                inst.version=avail.version;
-                localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-                renderAll();showToast('✅ '+inst.name+' обновлён до v'+avail.version)
-            }
-        }
-        function deletePlugin(id){
-            if(confirm('Удалить плагин?')){
-                STORE.installed=STORE.installed.filter(x=>x.id!==id);
-                localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-                renderAll();showToast('🗑️ Плагин удалён')
-            }
-        }
-        function showDetails(id){
-            const p=STORE.plugins.find(x=>x.id===id)||STORE.installed.find(x=>x.id===id);
-            if(!p)return;
-            const inst=STORE.installed.some(x=>x.id===p.id);
-            alert(p.name+' v'+p.version+'\n\n📝 '+p.description+'\n👤 Автор: '+p.author+'\n⭐ Рейтинг: '+(p.rating||'Нет')+'\n📥 Загрузок: '+(p.downloads||0)+(inst?'\n\n✅ Установлен':'\n\n❌ Не установлен'))
-        }
-        function uploadPlugin(){
-            const name=document.getElementById('upload-name').value.trim();
-            const desc=document.getElementById('upload-desc').value.trim();
-            const author=document.getElementById('upload-author').value.trim();
-            const version=document.getElementById('upload-version').value.trim()||'1.0.0';
-            const file=document.getElementById('file-input').files[0];
-            if(!name||!desc||!author||!file){showToast('⚠️ Заполните все поля и выберите файл');return}
-            const np={id:'user_'+Date.now(),name:name,description:desc,author:author,version:version,icon:'🔌',rating:0,downloads:0,isUser:true};
-            STORE.plugins.push(np);
-            STORE.installed.push({id:np.id,name:name,version:version,author:author,description:desc,icon:'🔌',installed:Date.now()});
-            localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
-            renderAll();showToast('✅ Плагин "'+name+'" загружен!');
-            document.getElementById('upload-name').value='';
-            document.getElementById('upload-desc').value='';
-            document.getElementById('upload-author').value='';
-            document.getElementById('upload-version').value='1.0.0';
-            document.getElementById('file-input').value='';
-            document.getElementById('file-name').textContent='Выберите файл';
-            switchTab('installed')
-        }
-        function selectFile(){
-            const input=document.getElementById('file-input');
-            const label=document.getElementById('file-name');
-            if(input.files&&input.files[0])label.textContent='📄 '+input.files[0].name
-        }
-        function switchTab(tab){
-            document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
-            document.getElementById('tab-'+tab).classList.add('active');
-            document.querySelector('.tab-btn[data-tab="'+tab+'"]').classList.add('active');
-            STORE.currentTab=tab
-        }
-        function showToast(text){
-            let toast=document.querySelector('.toast');
-            if(!toast){toast=document.createElement('div');toast.className='toast';document.body.appendChild(toast)}
-            toast.textContent=text;toast.classList.add('show');
-            setTimeout(()=>toast.classList.remove('show'),2500)
-        }
-        document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.tab)}));
-        loadData();
-    </script>
+<script>
+const STORE={plugins:[],installed:[],currentTab:'home'};
+const DEFAULT_PLUGINS=[
+    {id:'dolphy.vpn',name:'DolphyVPN',desc:'HTTP/3 VPN tunnel with encryption',author:'DCA',ver:'2.5.0',icon:'🔒',color:'#00bcd4',downloads:1256,rating:42},
+    {id:'dolphy.scanner',name:'Security Scanner',desc:'Plugin security scanner with detailed report',author:'gyrut',ver:'3.2.0',icon:'🛡️',color:'#2196f3',downloads:2345,rating:49},
+    {id:'dolphy.news',name:'Dolphy News',desc:'News aggregator with RSS support',author:'DCA',ver:'2.3.0',icon:'📰',color:'#1565c0',downloads:867,rating:46},
+    {id:'dolphy.browser',name:'Dolphy Browser',desc:'Browser with tabs and bookmarks',author:'DCA',ver:'2.0.0',icon:'🌐',color:'#4caf50',downloads:543,rating:45},
+    {id:'dolphy.code',name:'Dolphy Code',desc:'Code editor with syntax highlighting',author:'DCA',ver:'2.1.0',icon:'💻',color:'#007acc',downloads:789,rating:47}
+];
 
-    <div class="toast"></div>
+function loadData(){
+    try{const d=localStorage.getItem('store_installed');if(d)STORE.installed=JSON.parse(d)}catch(e){}
+    STORE.plugins=DEFAULT_PLUGINS;renderAll()
+}
+function renderAll(){renderStats();renderPopular();renderCatalog();renderInstalled()}
+function renderStats(){
+    document.getElementById('total').textContent=STORE.plugins.length;
+    document.getElementById('installed').textContent=STORE.installed.length;
+    const u=STORE.installed.filter(p=>{const a=STORE.plugins.find(x=>x.id===p.id);return a&&a.ver!==p.ver}).length;
+    document.getElementById('updates').textContent=u
+}
+function renderPopular(){
+    const el=document.getElementById('popular');
+    const list=[...STORE.plugins].sort((a,b)=>(b.downloads||0)-(a.downloads||0)).slice(0,3);
+    el.innerHTML=list.map(p=>cardHtml(p,true)).join('')
+}
+function renderCatalog(){
+    document.getElementById('catalog-list').innerHTML=STORE.plugins.map(p=>cardHtml(p,false)).join('')
+}
+function renderInstalled(){
+    const el=document.getElementById('installed-list');
+    if(!STORE.installed.length){el.innerHTML='<div class="empty"><span class="icon">📦</span><h4>Нет плагинов</h4><p style="color:#666;font-size:13px">Установите что-нибудь из каталога</p></div>';return}
+    el.innerHTML=STORE.installed.map(p=>installedCard(p)).join('')
+}
+function cardHtml(p,compact){
+    const inst=STORE.installed.some(x=>x.id===p.id);
+    const c=p.color||'#2196f3';
+    return `<div class="plugin" style="border-left-color:${c}">
+        <div class="top"><span class="icon">${p.icon||'🔌'}</span>
+        <div class="info"><div class="name">${p.name}</div>
+        <div class="desc">${compact?p.desc.substring(0,50)+'...':p.desc}</div>
+        <div class="meta"><span>v${p.ver}</span><span>· ${p.author}</span><span>⭐${p.rating||0}</span><span>📥${p.downloads||0}</span></div></div></div>
+        <div class="actions">${!compact?`<button class="btn-details" onclick="showDetails('${p.id}')">📖 Подробнее</button>`:''}
+        ${inst?`<button class="btn-installed" disabled>✅ Установлен</button>`:`<button class="btn-install" onclick="installPlugin('${p.id}')">📥 Установить</button>`}</div>
+    </div>`
+}
+function installedCard(p){
+    const a=STORE.plugins.find(x=>x.id===p.id);
+    const u=a&&a.ver!==p.ver;
+    return `<div class="plugin" style="border-left-color:${u?'#ffa726':'#4caf50'}">
+        <div class="top"><span class="icon">${p.icon||'🔌'}</span>
+        <div class="info"><div class="name">${p.name}${u?' 🔄':''}</div>
+        <div class="meta"><span>v${p.ver}</span><span>· ${p.author}</span>${u?`<span style="color:#ffa726">→ v${a.ver}</span>`:''}</div></div></div>
+        <div class="actions">${u?`<button class="btn-install" onclick="updatePlugin('${p.id}')">🔄 Обновить</button>`:''}
+        <button class="btn-details" onclick="showDetails('${p.id}')">📖 Подробнее</button>
+        <button class="btn-delete" onclick="deletePlugin('${p.id}')">🗑️</button></div>
+    </div>`
+}
+function filterPlugins(){
+    const q=document.getElementById('search').value.toLowerCase();
+    document.querySelectorAll('#catalog-list .plugin').forEach(el=>{
+        const n=el.querySelector('.name')?.textContent?.toLowerCase()||'';
+        const d=el.querySelector('.desc')?.textContent?.toLowerCase()||'';
+        el.style.display=n.includes(q)||d.includes(q)?'block':'none'
+    })
+}
+function installPlugin(id){
+    const p=STORE.plugins.find(x=>x.id===id);
+    if(!p||STORE.installed.some(x=>x.id===id)){showToast('⚠️ Уже установлен');return}
+    if(confirm(`Установить ${p.name} v${p.ver}?`)){
+        STORE.installed.push({id:p.id,name:p.name,ver:p.ver,author:p.author,desc:p.desc,icon:p.icon||'🔌',installed:Date.now()});
+        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
+        renderAll();showToast('✅ Установлен!')
+    }
+}
+function updatePlugin(id){
+    const i=STORE.installed.find(x=>x.id===id),a=STORE.plugins.find(x=>x.id===id);
+    if(!i||!a)return;
+    if(confirm(`Обновить ${i.name}? v${i.ver} → v${a.ver}`)){
+        i.ver=a.ver;
+        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
+        renderAll();showToast('✅ Обновлено!')
+    }
+}
+function deletePlugin(id){
+    if(confirm('Удалить плагин?')){
+        STORE.installed=STORE.installed.filter(x=>x.id!==id);
+        localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
+        renderAll();showToast('🗑️ Удалено')
+    }
+}
+function showDetails(id){
+    const p=STORE.plugins.find(x=>x.id===id)||STORE.installed.find(x=>x.id===id);
+    if(!p)return;
+    const inst=STORE.installed.some(x=>x.id===p.id);
+    alert(`${p.name} v${p.ver}\n\n📝 ${p.desc}\n👤 ${p.author}\n⭐ ${p.rating||'Нет'}\n📥 ${p.downloads||0}${inst?'\n\n✅ Установлен':'\n\n❌ Не установлен'}`)
+}
+function uploadPlugin(){
+    const n=document.getElementById('up-name').value.trim(),d=document.getElementById('up-desc').value.trim(),a=document.getElementById('up-author').value.trim(),v=document.getElementById('up-version').value.trim()||'1.0.0',f=document.getElementById('file-input').files[0];
+    if(!n||!d||!a||!f){showToast('⚠️ Заполните всё и выберите файл');return}
+    const np={id:'user_'+Date.now(),name:n,desc:d,author:a,ver:v,icon:'🔌',rating:0,downloads:0};
+    STORE.plugins.push(np);
+    STORE.installed.push({id:np.id,name:n,ver:v,author:a,desc:d,icon:'🔌',installed:Date.now()});
+    localStorage.setItem('store_installed',JSON.stringify(STORE.installed));
+    renderAll();showToast('✅ Загружено!');
+    document.getElementById('up-name').value='';document.getElementById('up-desc').value='';document.getElementById('up-author').value='';document.getElementById('up-version').value='1.0.0';document.getElementById('file-input').value='';document.getElementById('file-name').textContent='Выберите файл';
+    switchTab('installed')
+}
+function selectFile(){
+    const i=document.getElementById('file-input'),l=document.getElementById('file-name');
+    if(i.files&&i.files[0])l.textContent='📄 '+i.files[0].name
+}
+function switchTab(tab){
+    document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+    document.querySelectorAll('.tabs button').forEach(el=>el.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    document.querySelector(`.tabs button[data-tab="${tab}"]`).classList.add('active')
+}
+function showToast(t){
+    let el=document.querySelector('.toast');
+    if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}
+    el.textContent=t;el.classList.add('show');
+    setTimeout(()=>el.classList.remove('show'),2500)
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',function(){switchTab(this.dataset.tab)}));
+loadData();
+</script>
+<div class="toast"></div>
 </body>
 </html>
