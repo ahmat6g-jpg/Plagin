@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plugin Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-header">
+        <div class="header-content">
+            <h1>🛒 Plugin Store</h1>
+            <span class="badge">v3.0</span>
+        </div>
+    </div>
+
+    <div class="tab-bar">
+        <button class="tab-btn active" data-tab="home">🏠 Главная</button>
+        <button class="tab-btn" data-tab="catalog">📚 Каталог</button>
+        <button class="tab-btn" data-tab="installed">📦 Установленные</button>
+        <button class="tab-btn" data-tab="upload">📤 Загрузить</button>
+    </div>
+
+    <!-- Home Tab -->
+    <div id="tab-home" class="tab-content active">
+        <div class="welcome-card">
+            <h2>🔥 Добро пожаловать в Plugin Store!</h2>
+            <p class="subtitle">Магазин плагинов для Dolphy</p>
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="stat-number" id="total-plugins">0</span>
+                    <span class="stat-label">Доступно</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="installed-count">0</span>
+                    <span class="stat-label">Установлено</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="update-count">0</span>
+                    <span class="stat-label">Обновлений</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h3>⭐ Популярные</h3>
+                <button class="see-all" onclick="switchTab('catalog')">Смотреть все →</button>
+            </div>
+            <div id="popular-list"></div>
+        </div>
+
+        <div class="quick-actions">
+            <button class="action-btn primary" onclick="switchTab('catalog')">📚 Открыть каталог</button>
+            <button class="action-btn secondary" onclick="switchTab('upload')">📤 Загрузить свой</button>
+        </div>
+    </div>
+
+    <!-- Catalog Tab -->
+    <div id="tab-catalog" class="tab-content">
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="🔍 Поиск плагинов..." oninput="filterPlugins()">
+        </div>
+        <div id="catalog-list"></div>
+    </div>
+
+    <!-- Installed Tab -->
+    <div id="tab-installed" class="tab-content">
+        <div id="installed-list"></div>
+    </div>
+
+    <!-- Upload Tab -->
+    <div id="tab-upload" class="tab-content">
+        <div class="upload-form">
+            <h3>📤 Загрузка плагина</h3>
+            <p class="subtitle">Поделитесь своим плагином с сообществом</p>
+
+            <div class="form-group">
+                <label>📝 Название плагина</label>
+                <input type="text" id="upload-name" placeholder="Название">
+            </div>
+
+            <div class="form-group">
+                <label>📄 Описание</label>
+                <textarea id="upload-desc" placeholder="Краткое описание" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>👤 Автор</label>
+                <input type="text" id="upload-author" placeholder="Ваше имя">
+            </div>
+
+            <div class="form-group">
+                <label>📌 Версия</label>
+                <input type="text" id="upload-version" placeholder="1.0.0" value="1.0.0">
+            </div>
+
+            <div class="form-group">
+                <label>📂 Файл плагина (.js)</label>
+                <div class="file-drop" onclick="document.getElementById('file-input').click()">
+                    <span id="file-name">Выберите файл</span>
+                    <input type="file" id="file-input" accept=".js" onchange="selectFile()">
+                </div>
+            </div>
+
+            <button class="action-btn primary" onclick="uploadPlugin()" style="width:100%;margin-top:16px;">
+                🚀 Опубликовать плагин
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
