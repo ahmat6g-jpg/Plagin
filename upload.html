@@ -3,191 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Загрузить плагин — Dolphy Store</title>
+  <title>Загрузка плагина - Dolphy</title>
   <style>
-    :root {
-      --bg-color: #0d0d0d;
-      --card-bg: #16181c;
-      --card-border: #262930;
-      --text-main: #f0f3f6;
-      --text-muted: #8b949e;
-      --accent-cyan: #00bcd4;
-      --accent-green: #4caf50;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      background-color: #0d0d0d;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 16px;
+      padding: 20px;
     }
 
     .container {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: #141414;
+      border: 1px solid #222;
       border-radius: 16px;
-      padding: 24px;
       width: 100%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      max-width: 420px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
     }
 
     .header-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
+      color: #fff;
       margin-bottom: 6px;
+      text-align: center;
     }
 
-    .header-desc {
-      font-size: 13px;
-      color: var(--text-muted);
+    .header-subtitle {
+      font-size: 12px;
+      color: #666;
       margin-bottom: 20px;
+      text-align: center;
     }
 
-    /* Drop Zone */
+    /* Drag & Drop зона */
     .drop-zone {
-      border: 2px dashed var(--card-border);
+      border: 2px dashed #333;
       border-radius: 12px;
-      padding: 30px 16px;
+      padding: 28px 16px;
+      text-align: center;
+      background: #181818;
+      transition: all 0.2s ease;
       cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.01);
+      margin-bottom: 16px;
     }
 
     .drop-zone.dragover {
-      border-color: var(--accent-cyan);
+      border-color: #00bcd4;
       background: rgba(0, 188, 212, 0.05);
     }
 
     .drop-icon {
-      font-size: 36px;
+      font-size: 32px;
       margin-bottom: 8px;
     }
 
     .drop-text {
       font-size: 13px;
-      color: var(--text-muted);
+      color: #aaa;
+      margin-bottom: 12px;
     }
 
     .file-input {
       display: none;
     }
 
-    /* Информация о выбранном файле */
-    .file-info {
+    .browse-btn {
+      display: inline-block;
+      background: #222;
+      color: #00bcd4;
+      border: 1px solid rgba(0, 188, 212, 0.3);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Метаданные выбранного файла */
+    .file-details {
       display: none;
-      background: #000;
-      border: 1px solid var(--card-border);
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
       border-radius: 8px;
       padding: 12px;
-      margin-bottom: 20px;
-      text-align: left;
+      margin-bottom: 16px;
     }
 
     .file-name {
-      font-size: 14px;
+      font-size: 13px;
+      color: #fff;
       font-weight: 600;
-      color: var(--accent-cyan);
       word-break: break-all;
     }
 
     .file-size {
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 11px;
+      color: #777;
       margin-top: 2px;
     }
 
-    /* Кнопки */
-    .action-btn {
+    /* Кнопки управления */
+    .upload-btn {
       width: 100%;
+      background: linear-gradient(135deg, #1565c0, #00bcd4);
+      color: #fff;
+      border: none;
       padding: 14px;
       border-radius: 10px;
       font-size: 15px;
       font-weight: 600;
-      border: none;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.2);
     }
 
-    .btn-submit {
-      background: linear-gradient(135deg, #00bcd4, #1565c0);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
-      opacity: 0.5;
-      pointer-events: none;
+    .upload-btn:disabled {
+      background: #222;
+      color: #555;
+      box-shadow: none;
+      cursor: not-allowed;
     }
 
-    .btn-submit.active {
-      opacity: 1;
-      pointer-events: auto;
+    .close-btn {
+      width: 100%;
+      background: #1a1a1a;
+      color: #888;
+      border: 1px solid #2a2a2a;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
     }
 
-    .btn-submit:active {
-      transform: scale(0.98);
-    }
-
-    .btn-close {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--card-border);
-    }
-
-    .status-msg {
-      margin-top: 12px;
-      font-size: 13px;
-      color: var(--accent-green);
+    .alert {
       display: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .alert-success {
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      color: #4caf50;
+    }
+
+    .alert-error {
+      background: rgba(244, 67, 54, 0.1);
+      border: 1px solid rgba(244, 67, 54, 0.3);
+      color: #f44336;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1 class="header-title">📤 Загрузить плагин</h1>
-    <p class="header-desc">Выберите файл формата .js для публикации в магазине Dolphy</p>
+    <div class="header-title">Публикация плагина</div>
+    <div class="header-subtitle">Загрузите `.js` файл расширения Dolphy</div>
 
-    <!-- Область перетаскивания / выбора -->
-    <div class="drop-zone" id="drop-zone" onclick="triggerFileInput()">
+    <div id="status-alert" class="alert"></div>
+
+    <!-- Область перетаскивания и выбора -->
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <div class="drop-icon">📄</div>
-      <div class="drop-text" id="drop-text">
-        Перетащите сюда файл .js<br>или <b>нажмите для выбора</b>
-      </div>
-      <input type="file" id="file-input" class="file-input" accept=".js" onchange="handleFileSelect(event)">
+      <div class="drop-text">Перетащите сюда .js файл или нажмите для выбора</div>
+      <span class="browse-btn">Выбрать файл</span>
+      <input type="file" id="file-input" class="file-input" accept=".js" onchange="handleFileSelect(this.files)">
     </div>
 
-    <!-- Детали файла -->
-    <div class="file-info" id="file-info">
-      <div class="file-name" id="file-name">filename.js</div>
-      <div class="file-size" id="file-size">0 KB</div>
+    <!-- Данные о выбранном файле -->
+    <div class="file-details" id="file-details">
+      <div class="file-name" id="file-name-text">filename.js</div>
+      <div class="file-size" id="file-size-text">0 KB</div>
     </div>
 
-    <button class="action-btn btn-submit" id="btn-submit" onclick="uploadFile()">
-      <span>🚀</span> Отправить на проверку
-    </button>
-
-    <button class="action-btn btn-close" onclick="closeWindow()">
-      Закрыть
-    </button>
-
-    <div class="status-msg" id="status-msg">
-      ✅ Плагин отправлен! Он появится в каталоге после проверки.
-    </div>
+    <button class="upload-btn" id="upload-btn" disabled onclick="processUpload()">📤 Загрузить плагин</button>
+    <button class="close-btn" onclick="closeWindow()">Закрыть</button>
   </div>
 
   <script>
@@ -195,82 +199,99 @@
 
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
+    const fileDetails = document.getElementById('file-details');
+    const uploadBtn = document.getElementById('upload-btn');
+    const alertBox = document.getElementById('status-alert');
 
-    // Клик по зоне выбора
-    function triggerFileInput() {
-      fileInput.click();
+    // Обработчики Drag and Drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
 
-    // Drag and Drop события
     ['dragenter', 'dragover'].forEach(eventName => {
-      dropZone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-      }, false);
+      dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
     });
 
     ['dragleave', 'drop'].forEach(eventName => {
-      dropZone.addEventListener(eventName, (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-      }, false);
+      dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
     });
 
     dropZone.addEventListener('drop', (e) => {
       const dt = e.dataTransfer;
       const files = dt.files;
-      if (files.length > 0) {
-        processFile(files[0]);
-      }
+      handleFileSelect(files);
     });
 
-    // Изменение через системный диалог выбора файлов
-    function handleFileSelect(event) {
-      const files = event.target.files;
-      if (files.length > 0) {
-        processFile(files[0]);
-      }
-    }
+    // Обработка выбора файла
+    function handleFileSelect(files) {
+      if (files.length === 0) return;
 
-    // Обработка выбранного файла
-    function processFile(file) {
+      const file = files[0];
       if (!file.name.endsWith('.js')) {
-        alert('Пожалуйста, выберите файл с расширением .js');
+        showAlert('Пожалуйста, выберите файл с расширением .js', 'error');
         return;
       }
 
       selectedFile = file;
-
-      // Отображение сведений
-      document.getElementById('file-name').innerText = file.name;
-      document.getElementById('file-size').innerText = `${(file.size / 1024).toFixed(2)} KB`;
-      document.getElementById('file-info').style.display = 'block';
-
-      // Активация кнопки
-      const btn = document.getElementById('btn-submit');
-      btn.classList.add('active');
+      document.getElementById('file-name-text').innerText = file.name;
+      document.getElementById('file-size-text').innerText = formatBytes(file.size);
+      
+      fileDetails.style.display = 'block';
+      uploadBtn.disabled = false;
+      alertBox.style.display = 'none';
     }
 
-    // Симуляция отправки плагина
-    function uploadFile() {
+    // Симуляция чтения файла и отправки
+    function processUpload() {
       if (!selectedFile) return;
 
       const reader = new FileReader();
+      
       reader.onload = function(e) {
-        const content = e.target.result;
-        console.log('Содержимое загружаемого плагина:', content);
+        const fileContent = e.target.result;
+        
+        // Валидация содержимого (проверка структуры)
+        if (fileContent.includes('function onLoad') || fileContent.includes('@plugin')) {
+          showAlert(`Плагин "${selectedFile.name}" успешно прочитан и готов к проверке!`, 'success');
+          uploadBtn.disabled = true;
+        } else {
+          showAlert('Файл не содержит корректных вызовов API плагинов Dolphy.', 'error');
+        }
+      };
 
-        // Успешный результат
-        document.getElementById('status-msg').style.display = 'block';
-        document.getElementById('btn-submit').classList.remove('active');
+      reader.onerror = function() {
+        showAlert('Ошибка при чтении файла.', 'error');
       };
 
       reader.readAsText(selectedFile);
     }
 
-    // Закрытие окна
+    // Хелпер форматирования размера
+    function formatBytes(bytes, decimals = 2) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const dm = decimals < 0 ? 0 : decimals;
+      const sizes = ['Bytes', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    function showAlert(msg, type) {
+      alertBox.innerText = msg;
+      alertBox.className = `alert alert-${type}`;
+      alertBox.style.display = 'block';
+    }
+
     function closeWindow() {
       window.close();
+      setTimeout(() => {
+        alert('Вы можете закрыть эту вкладку системного браузера вручную.');
+      }, 300);
     }
   </script>
 </body>
