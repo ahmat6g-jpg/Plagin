@@ -3,151 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Скачивание плагина — Dolphy Store</title>
+  <title>Загрузка плагина - Dolphy</title>
   <style>
-    :root {
-      --bg-color: #0d0d0d;
-      --card-bg: #16181c;
-      --card-border: #262930;
-      --text-main: #f0f3f6;
-      --text-muted: #8b949e;
-      --accent-cyan: #00bcd4;
-      --accent-green: #4caf50;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      background-color: #0d0d0d;
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 16px;
+      padding: 20px;
     }
 
     .container {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: #141414;
+      border: 1px solid #222;
       border-radius: 16px;
-      padding: 24px;
       width: 100%;
       max-width: 400px;
+      padding: 24px;
       text-align: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
     }
 
-    .plugin-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-      display: inline-block;
+    .icon-wrapper {
+      width: 72px;
+      height: 72px;
+      background: #1a1a1a;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 16px;
+      border: 1px solid #2a2a2a;
     }
 
-    .plugin-title {
+    .title {
       font-size: 20px;
       font-weight: 700;
+      color: #fff;
       margin-bottom: 4px;
     }
 
-    .plugin-info {
+    .version {
       font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 20px;
+      color: #00bcd4;
+      margin-bottom: 16px;
     }
 
-    .code-preview {
-      background: #000;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 12px;
-      font-family: monospace;
-      font-size: 11px;
-      color: #a9b7c6;
-      text-align: left;
-      height: 120px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      white-space: pre-wrap;
-      word-break: break-all;
+    .author {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 24px;
     }
 
     .action-btn {
       width: 100%;
+      background: linear-gradient(135deg, #1565c0, #00bcd4);
+      color: #fff;
+      border: none;
       padding: 14px;
       border-radius: 10px;
       font-size: 15px;
       font-weight: 600;
-      border: none;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.25);
     }
 
-    .btn-download {
-      background: linear-gradient(135deg, #00bcd4, #1565c0);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+    .close-btn {
+      width: 100%;
+      background: #1a1a1a;
+      color: #888;
+      border: 1px solid #2a2a2a;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
     }
 
-    .btn-download:active {
-      transform: scale(0.98);
-    }
-
-    .btn-close {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--card-border);
-    }
-
-    .status-msg {
-      margin-top: 12px;
-      font-size: 13px;
-      color: var(--accent-green);
+    .success-msg {
       display: none;
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      color: #4caf50;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .error-msg {
+      color: #f44336;
+      font-size: 14px;
+      margin-bottom: 16px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div id="content-area">
-      <div class="plugin-icon" id="icon">📦</div>
-      <h1 class="plugin-title" id="name">Загрузка...</h1>
-      <p class="plugin-info" id="meta">Пожалуйста, подождите</p>
-
-      <div class="code-preview" id="code-preview">// Загрузка исходного кода...</div>
-
-      <button class="action-btn btn-download" id="btn-save" onclick="executeDownload()">
-        <span>💾</span> Скачать файл .js
-      </button>
-      <button class="action-btn btn-close" onclick="closeWindow()">
-        Закрыть
-      </button>
-
-      <div class="status-msg" id="status-msg">
-        ✅ Файл успешно сохранен! Импортируйте его в приложении Dolphy.
-      </div>
-    </div>
+  <div class="container" id="app">
+    <!-- Контент будет сгенерирован динамически -->
   </div>
 
   <script>
     // База данных кодов плагинов
-    const PLUGIN_DATA = {
+    const PLUGIN_DATABASE = {
       'dolphyvpn': {
-        name: 'DolphyVPN',
-        version: '2.5.0',
-        author: 'DCA',
-        icon: '🔒',
-        filename: 'dolphyvpn.js',
+        name: 'DolphyVPN', version: '2.5.0', author: 'DCA', icon: '🔒',
         code: `// @plugin id=dolphy.vpn name="DolphyVPN" version=2.5.0
 function onLoad(api) {
   api.other.add({
@@ -178,132 +150,182 @@ function onUnload(api) {
 }`
       },
       'secscan': {
-        name: 'Security Scanner',
-        version: '3.2.0',
-        author: 'gyrut',
-        icon: '🛡️',
-        filename: 'secscan.js',
+        name: 'Security Scanner', version: '3.2.0', author: 'gyrut', icon: '🛡️',
         code: `// @plugin id=dolphy.secscan name="Security Scanner" version=3.2.0
 function onLoad(api) {
-  api.other.add({ section: "main", title: "Security Scanner", icon: "🛡️", screen: "main", color: 0xFF2196F3 });
-  api.toast('🛡️ Security Scanner ready');
+  api.other.add({
+    section: "main",
+    title: "Security Scanner",
+    description: "Plugin security scanner",
+    icon: "🛡️",
+    screen: "main",
+    color: 0xFF2196F3,
+    order: 1
+  });
+  api.toast('✅ Security Scanner loaded');
 }
 function screen_main(ui, api, state) {
   return ui.scaffold({
     topBar: { title: '🛡️ Security Scanner', showBack: true },
     content: ui.column({ padding: 16 }, [
-      ui.text('Plugin Security Audit', { style: 'titleLarge' }),
-      ui.spacer({ height: 12 }),
-      ui.button('Start Deep Scan', { onClick: function() { api.toast('Scanning system...'); } })
+      ui.text('Security Scanner v3.2.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('Plugin security scanner with detailed report', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: gyrut', { style: 'bodySmall', color: 0xFF666666 })
     ])
   });
+}
+function onUnload(api) {
+  api.toast('Security Scanner unloaded');
 }`
       },
       'dolphynews': {
-        name: 'Dolphy News',
-        version: '2.3.0',
-        author: 'DCA',
-        icon: '📰',
-        filename: 'dolphynews.js',
+        name: 'Dolphy News', version: '2.3.0', author: 'DCA', icon: '📰',
         code: `// @plugin id=dolphy.news name="Dolphy News" version=2.3.0
 function onLoad(api) {
-  api.other.add({ section: "main", title: "Dolphy News", icon: "📰", screen: "main", color: 0xFF1565C0 });
+  api.other.add({
+    section: "main",
+    title: "Dolphy News",
+    description: "News aggregator with RSS",
+    icon: "📰",
+    screen: "main",
+    color: 0xFF1565C0,
+    order: 2
+  });
+  api.toast('✅ Dolphy News loaded');
 }
 function screen_main(ui, api, state) {
   return ui.scaffold({
-    topBar: { title: '📰 Dolphy News Hub', showBack: true },
+    topBar: { title: '📰 Dolphy News', showBack: true },
     content: ui.column({ padding: 16 }, [
-      ui.text('Latest Tech Updates', { style: 'titleMedium' })
+      ui.text('Dolphy News v2.3.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('News aggregator with RSS support', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: DCA', { style: 'bodySmall', color: 0xFF666666 })
     ])
   });
+}
+function onUnload(api) {
+  api.toast('Dolphy News unloaded');
 }`
       },
       'dolphybrowser': {
-        name: 'Dolphy Browser',
-        version: '2.0.0',
-        author: 'DCA',
-        icon: '🌐',
-        filename: 'dolphybrowser.js',
+        name: 'Dolphy Browser', version: '2.0.0', author: 'DCA', icon: '🌐',
         code: `// @plugin id=dolphy.browser name="Dolphy Browser" version=2.0.0
 function onLoad(api) {
-  api.other.add({ section: "main", title: "Dolphy Browser", icon: "🌐", screen: "main", color: 0xFF4CAF50 });
+  api.other.add({
+    section: "main",
+    title: "Dolphy Browser",
+    description: "Browser with tabs",
+    icon: "🌐",
+    screen: "main",
+    color: 0xFF4CAF50,
+    order: 3
+  });
+  api.toast('✅ Dolphy Browser loaded');
 }
 function screen_main(ui, api, state) {
   return ui.scaffold({
-    topBar: { title: '🌐 Web Browser', showBack: true },
+    topBar: { title: '🌐 Dolphy Browser', showBack: true },
     content: ui.column({ padding: 16 }, [
-      ui.text('Browser Tab Controller', { style: 'bodyLarge' })
+      ui.text('Dolphy Browser v2.0.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('Browser with tabs and bookmarks', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: DCA', { style: 'bodySmall', color: 0xFF666666 })
     ])
   });
+}
+function onUnload(api) {
+  api.toast('Dolphy Browser unloaded');
 }`
       },
       'dolphycode': {
-        name: 'Dolphy Code',
-        version: '2.1.0',
-        author: 'DCA',
-        icon: '💻',
-        filename: 'dolphycode.js',
+        name: 'Dolphy Code', version: '2.1.0', author: 'DCA', icon: '💻',
         code: `// @plugin id=dolphy.code name="Dolphy Code" version=2.1.0
 function onLoad(api) {
-  api.other.add({ section: "main", title: "Dolphy Code", icon: "💻", screen: "main", color: 0xFF007ACC });
+  api.other.add({
+    section: "main",
+    title: "Dolphy Code",
+    description: "Code editor with syntax highlighting",
+    icon: "💻",
+    screen: "main",
+    color: 0xFF007ACC,
+    order: 4
+  });
+  api.toast('✅ Dolphy Code loaded');
 }
 function screen_main(ui, api, state) {
   return ui.scaffold({
-    topBar: { title: '💻 Code Editor', showBack: true },
+    topBar: { title: '💻 Dolphy Code', showBack: true },
     content: ui.column({ padding: 16 }, [
-      ui.text('JavaScript IDE Environment', { style: 'bodyLarge' })
+      ui.text('Dolphy Code v2.1.0', { style: 'titleLarge', bold: true }),
+      ui.spacer({ height: 8 }),
+      ui.text('Code editor with syntax highlighting', { style: 'bodyMedium', color: 0xFF888888 }),
+      ui.spacer({ height: 16 }),
+      ui.text('👤 Author: DCA', { style: 'bodySmall', color: 0xFF666666 })
     ])
   });
+}
+function onUnload(api) {
+  api.toast('Dolphy Code unloaded');
 }`
       }
     };
 
-    let currentPlugin = null;
+    // Чтение параметров URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pluginId = urlParams.get('id');
+    const plugin = PLUGIN_DATABASE[pluginId];
 
-    // Инициализация при загрузке страницы
-    function init() {
-      const params = new URLSearchParams(window.location.search);
-      const pluginId = params.get('id');
+    const appContainer = document.getElementById('app');
 
-      if (pluginId && PLUGIN_DATA[pluginId]) {
-        currentPlugin = PLUGIN_DATA[pluginId];
-        document.getElementById('icon').innerText = currentPlugin.icon;
-        document.getElementById('name').innerText = currentPlugin.name;
-        document.getElementById('meta').innerText = `Версия ${currentPlugin.version} • Автор: ${currentPlugin.author}`;
-        document.getElementById('code-preview').innerText = currentPlugin.code;
-      } else {
-        document.getElementById('name').innerText = 'Плагин не найден';
-        document.getElementById('meta').innerText = 'Некорректный идентификатор запроса';
-        document.getElementById('btn-save').style.display = 'none';
-        document.getElementById('code-preview').innerText = '// Ошибка: Данные отсутствуют';
-      }
+    if (!plugin) {
+      appContainer.innerHTML = `
+        <div class="error-msg">⚠️ Плагин не найден</div>
+        <button class="close-btn" onclick="closeWindow()">Закрыть</button>
+      `;
+    } else {
+      appContainer.innerHTML = `
+        <div class="icon-wrapper">${plugin.icon}</div>
+        <h1 class="title">${plugin.name}</h1>
+        <div class="version">Версия ${plugin.version}</div>
+        <div class="author">Автор: ${plugin.author}</div>
+        <div id="success" class="success-msg">✅ Файл успешно сохранен!</div>
+        <button class="action-btn" onclick="triggerDownload()">📥 Скачать .js файл</button>
+        <button class="close-btn" onclick="closeWindow()">Закрыть</button>
+      `;
     }
 
-    // Скачивание файла без внешних библиотек
-    function executeDownload() {
-      if (!currentPlugin) return;
-
-      const blob = new Blob([currentPlugin.code], { type: 'text/javascript;charset=utf-8;' });
-      const link = document.createElement('a');
+    // Инициализация загрузки через Blob и временную ссылку
+    function triggerDownload() {
+      if (!plugin) return;
+      
+      const blob = new Blob([plugin.code], { type: 'text/javascript;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-
-      link.setAttribute('href', url);
-      link.setAttribute('download', currentPlugin.filename);
-      link.style.visibility = 'hidden';
-
+      const link = document.createElement('a');
+      
+      link.href = url;
+      link.download = `${pluginId}.js`;
       document.body.appendChild(link);
       link.click();
+      
       document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-      document.getElementById('status-msg').style.display = 'block';
+      document.getElementById('success').style.display = 'block';
     }
 
-    // Закрытие вкладки
+    // Безопасное закрытие окна/вкладки
     function closeWindow() {
       window.close();
+      // Фолбэк на случай блокировки закрытия браузером
+      setTimeout(() => {
+        alert('Вы можете закрыть эту вкладку системного браузера вручную.');
+      }, 300);
     }
-
-    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
